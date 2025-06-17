@@ -75,7 +75,7 @@ Database migration scripts follow a strict timestamp-based naming convention:
 ## 🚀 Getting Started
 
 ### Prerequisites
-- .NET 8 SDK
+- .NET 9 SDK
 - Node.js 18+ and npm
 - Azure CLI
 - Git
