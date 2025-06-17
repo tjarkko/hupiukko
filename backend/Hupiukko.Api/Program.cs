@@ -1,27 +1,43 @@
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.OpenApi;
+using Microsoft.EntityFrameworkCore;
+using Hupiukko.Api.BusinessLogic.Db;
+using Hupiukko.Api.BusinessLogic.Managers;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
-// Add Swagger/OpenAPI services
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    c.SwaggerDoc("v1", new() { Title = "Hupiukko API", Version = "v1" });
+});
+
+// Add DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Add FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+
+// Add Manager services
+builder.Services.AddScoped<IUsersManager, UsersManager>();
+builder.Services.AddScoped<IExercisesManager, ExercisesManager>();
+builder.Services.AddScoped<IWorkoutManager, WorkoutManager>();
+
+// Add CORS for development
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
     {
-        Title = "Hupiukko API",
-        Version = "v1",
-        Description = "API for Hupiukko application",
-        Contact = new OpenApiContact
-        {
-            Name = "Hupiukko Team",
-            Email = "support@hupiukko.com"
-        }
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
@@ -30,16 +46,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hupiukko API V1");
-        c.RoutePrefix = "swagger";
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS
+app.UseCors();
 
 app.UseAuthorization();
 

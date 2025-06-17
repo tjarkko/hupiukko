@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Hupiukko.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fac2500555746aac0b14a62287d4e2606bb2e242")]
 [assembly: System.Reflection.AssemblyProductAttribute("Hupiukko.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Hupiukko.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
