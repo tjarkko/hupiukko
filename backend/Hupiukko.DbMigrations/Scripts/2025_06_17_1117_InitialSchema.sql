@@ -76,6 +76,7 @@ CREATE TABLE ProgramExercises (
     DefaultWeight DECIMAL(6,2), -- NULL for bodyweight exercises
     DefaultRestTimeSeconds INT, -- Default rest between sets
     Notes NVARCHAR(1000), -- Exercise-specific notes for this program
+    DayOfWeek INT, -- 0=Sunday, 1=Monday, ..., 6=Saturday (nullable)
     CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     IsDeleted BIT NOT NULL DEFAULT 0,

@@ -4,11 +4,17 @@ using Hupiukko.Api.BusinessLogic.Managers;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Any;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -45,6 +51,7 @@ builder.Services.AddSwaggerGen(c =>
             new[] { builder.Configuration["AzureAd:Audience"] + "/.default" }
         }
     });
+    c.SchemaFilter<EnumSchemaFilter>();
 });
 
 // Add DbContext
@@ -110,3 +117,19 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Enum schema filter for Swagger
+public class EnumSchemaFilter : Swashbuckle.AspNetCore.SwaggerGen.ISchemaFilter
+{
+    public void Apply(Microsoft.OpenApi.Models.OpenApiSchema schema, Swashbuckle.AspNetCore.SwaggerGen.SchemaFilterContext context)
+    {
+        if (context.Type.IsEnum)
+        {
+            schema.Enum.Clear();
+            foreach (var name in System.Enum.GetNames(context.Type))
+            {
+                schema.Enum.Add(new Microsoft.OpenApi.Any.OpenApiString(name));
+            }
+        }
+    }
+}

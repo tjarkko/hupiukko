@@ -2,6 +2,7 @@ namespace Hupiukko.Api.Dtos;
 
 using System;
 using System.Collections.Generic;
+using Hupiukko.Api.BusinessLogic.Models;
 
 public class WorkoutProgramDto
 {
@@ -30,6 +31,7 @@ public class ProgramExerciseDto
     public int? DefaultRestTimeSeconds { get; set; }
     public string? Notes { get; set; }
     public List<ProgramExerciseSetDto> ProgramExerciseSets { get; set; } = new();
+    public Hupiukko.Api.BusinessLogic.Models.DayOfWeek? DayOfWeek { get; set; } // 0=Sunday, 1=Monday, ..., 6=Saturday
 }
 
 public class ProgramExerciseSetDto

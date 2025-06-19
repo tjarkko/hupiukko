@@ -23,6 +23,7 @@ public class CreateProgramExerciseRequest
     public decimal? DefaultWeight { get; set; }
     public int? DefaultRestTimeSeconds { get; set; }
     public string? Notes { get; set; }
+    public Hupiukko.Api.BusinessLogic.Models.DayOfWeek? DayOfWeek { get; set; } // 0=Sunday, 1=Monday, ..., 6=Saturday
     public List<CreateProgramExerciseSetRequest> ProgramExerciseSets { get; set; } = new();
 }
 

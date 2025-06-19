@@ -45,6 +45,7 @@ export interface CreateProgramExerciseRequest {
   defaultRestTimeSeconds?: number | null;
   /** @nullable */
   notes?: string | null;
+  dayOfWeek?: DayOfWeek;
   /** @nullable */
   programExerciseSets?: CreateProgramExerciseSetRequest[] | null;
 }
@@ -87,6 +88,20 @@ export interface CreateWorkoutProgramRequest {
   /** @nullable */
   programExercises?: CreateProgramExerciseRequest[] | null;
 }
+
+export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const DayOfWeek = {
+  Sunday: 'Sunday',
+  Monday: 'Monday',
+  Tuesday: 'Tuesday',
+  Wednesday: 'Wednesday',
+  Thursday: 'Thursday',
+  Friday: 'Friday',
+  Saturday: 'Saturday',
+} as const;
 
 export interface ExerciseCategoryDto {
   id?: string;
@@ -135,6 +150,7 @@ export interface ProgramExerciseDto {
   notes?: string | null;
   /** @nullable */
   programExerciseSets?: ProgramExerciseSetDto[] | null;
+  dayOfWeek?: DayOfWeek;
 }
 
 export interface ProgramExerciseSetDto {
