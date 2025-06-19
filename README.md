@@ -275,4 +275,32 @@ docker ps -a | grep hupiukko-sqlserver
 - The backend API and frontend should be started using their respective `dotnet run` and `npm run dev`/`yarn dev` commands.
 - Database connection string in your app should point to `localhost,1433` as configured.
 - The `-v sqlserver_data:/var/opt/mssql` flag ensures your database files persist between container runs.
-- To remove the persistent data volume: `docker volume rm sqlserver_data` (only do this if you want to delete all data). 
+- To remove the persistent data volume: `docker volume rm sqlserver_data` (only do this if you want to delete all data).
+
+## 🛠️ Generating the API Client (Orval)
+
+The frontend uses [Orval](https://orval.dev/) to generate a type-safe React Query API client from the backend's OpenAPI (Swagger) spec.
+
+### Prerequisites
+- The backend must be running and serving the OpenAPI spec at `http://localhost:5109/swagger/v1/swagger.json` (or your configured port).
+- You must have installed dependencies in `frontend/` (run `pnpm install` or `npm install`).
+
+### How to Generate
+From the `frontend/` directory, run:
+
+```bash
+pnpm orval --config orval.config.js
+```
+
+This will:
+- Fetch the latest OpenAPI spec from the running backend
+- Generate React Query hooks and TypeScript types in `frontend/api/generated/`
+
+### When to Regenerate
+- After making changes to backend endpoints, DTOs, or OpenAPI annotations
+- After changing the backend route structure (e.g., removing the `/api/` prefix)
+
+### Troubleshooting
+- If you see errors about missing endpoints or types, ensure the backend is running and the OpenAPI spec is accessible.
+- If the generated hooks use the wrong base URL, check `orval.config.js` for the correct `baseUrl` or `axios.baseURL` override.
+- If you change the backend route prefix (e.g., remove `/api/`), update the OpenAPI spec and regenerate the client. 

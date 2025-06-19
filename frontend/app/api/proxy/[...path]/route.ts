@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
 
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://localhost:7151/api';
+const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://localhost:7151';
 
 export async function GET(req: NextRequest, { params }: { params: { path: string[] } }) {
   const session = await getServerSession(authOptions);

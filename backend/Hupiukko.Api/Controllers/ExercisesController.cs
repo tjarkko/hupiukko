@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Hupiukko.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class ExercisesController : ControllerBase
 {
     private readonly IExercisesManager _exercisesManager;
