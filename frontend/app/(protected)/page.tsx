@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import AuthShowcase from './AuthShowcase';
 import MUIButton from './MUIButton';
+import ExerciseCategories from './ExerciseCategories';
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -14,6 +15,7 @@ export default async function HomePage() {
       </MUIButton>
       <p className="mt-4 text-gray-600">Tailwind and MUI are both working!</p>
       <AuthShowcase session={session} />
+      <ExerciseCategories />
     </main>
   );
 } 

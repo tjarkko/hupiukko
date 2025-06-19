@@ -9,7 +9,18 @@ export const authOptions = {
       tenantId: process.env.AZURE_AD_TENANT_ID!,
     }),
   ],
-  // You can add callbacks, session, etc. here if needed
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.accessToken = token.accessToken;
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
