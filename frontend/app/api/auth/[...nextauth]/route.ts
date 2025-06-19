@@ -7,6 +7,11 @@ export const authOptions = {
       clientId: process.env.AZURE_AD_CLIENT_ID!,
       clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
       tenantId: process.env.AZURE_AD_TENANT_ID!,
+      authorization: {
+        params: {
+          scope: "openid profile email api://cbc42c1f-4aa7-4bec-b803-2a9efb0211e0/user_impersonation"
+        }
+      }
     }),
   ],
   callbacks: {

@@ -6,7 +6,7 @@ namespace Hupiukko.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WorkoutController : ControllerBase
+public class WorkoutController : BaseApiController
 {
     private readonly IWorkoutManager _workoutManager;
 
@@ -18,12 +18,13 @@ public class WorkoutController : ControllerBase
     #region Workout Programs
 
     /// <summary>
-    /// Get user's workout programs
+    /// Get current user's workout programs
     /// </summary>
-    [HttpGet("programs/user/{userId}")]
-    public async Task<ActionResult<List<WorkoutProgramDto>>> GetUserPrograms(Guid userId)
+    [HttpGet("programs")]
+    public async Task<ActionResult<List<WorkoutProgramDto>>> GetUserPrograms()
     {
-        var programs = await _workoutManager.GetUserProgramsAsync(userId);
+        if (CurrentUser == null) return Unauthorized();
+        var programs = await _workoutManager.GetUserProgramsAsync(CurrentUser.Id);
         return Ok(programs);
     }
 
@@ -42,12 +43,13 @@ public class WorkoutController : ControllerBase
     }
 
     /// <summary>
-    /// Create a new workout program
+    /// Create a new workout program for current user
     /// </summary>
-    [HttpPost("programs/user/{userId}")]
-    public async Task<ActionResult<WorkoutProgramDto>> CreateProgram(Guid userId, CreateWorkoutProgramRequest request)
+    [HttpPost("programs")]
+    public async Task<ActionResult<WorkoutProgramDto>> CreateProgram(CreateWorkoutProgramRequest request)
     {
-        var program = await _workoutManager.CreateProgramAsync(userId, request);
+        if (CurrentUser == null) return Unauthorized();
+        var program = await _workoutManager.CreateProgramAsync(CurrentUser.Id, request);
         return CreatedAtAction(nameof(GetProgram), new { id = program.Id }, program);
     }
 
@@ -56,12 +58,13 @@ public class WorkoutController : ControllerBase
     #region Workout Sessions
 
     /// <summary>
-    /// Get user's workout sessions
+    /// Get current user's workout sessions
     /// </summary>
-    [HttpGet("sessions/user/{userId}")]
-    public async Task<ActionResult<List<WorkoutSessionDto>>> GetUserSessions(Guid userId)
+    [HttpGet("sessions")]
+    public async Task<ActionResult<List<WorkoutSessionDto>>> GetUserSessions()
     {
-        var sessions = await _workoutManager.GetUserWorkoutSessionsAsync(userId);
+        if (CurrentUser == null) return Unauthorized();
+        var sessions = await _workoutManager.GetUserWorkoutSessionsAsync(CurrentUser.Id);
         return Ok(sessions);
     }
 
@@ -80,28 +83,28 @@ public class WorkoutController : ControllerBase
     }
 
     /// <summary>
-    /// Get user's active workout session
+    /// Get current user's active workout session
     /// </summary>
-    [HttpGet("sessions/user/{userId}/active")]
-    public async Task<ActionResult<WorkoutSessionDto>> GetActiveSession(Guid userId)
+    [HttpGet("sessions/active")]
+    public async Task<ActionResult<WorkoutSessionDto>> GetActiveSession()
     {
-        var session = await _workoutManager.GetActiveWorkoutSessionAsync(userId);
-        
+        if (CurrentUser == null) return Unauthorized();
+        var session = await _workoutManager.GetActiveWorkoutSessionAsync(CurrentUser.Id);
         if (session == null)
             return NotFound("No active workout session found");
-
         return Ok(session);
     }
 
     /// <summary>
-    /// Start a new workout session
+    /// Start a new workout session for current user
     /// </summary>
-    [HttpPost("sessions/user/{userId}/start")]
-    public async Task<ActionResult<WorkoutSessionDto>> StartWorkout(Guid userId, StartWorkoutRequest request)
+    [HttpPost("sessions/start")]
+    public async Task<ActionResult<WorkoutSessionDto>> StartWorkout(StartWorkoutRequest request)
     {
+        if (CurrentUser == null) return Unauthorized();
         try
         {
-            var session = await _workoutManager.StartWorkoutAsync(userId, request);
+            var session = await _workoutManager.StartWorkoutAsync(CurrentUser.Id, request);
             return CreatedAtAction(nameof(GetSession), new { id = session.Id }, session);
         }
         catch (InvalidOperationException ex)
@@ -150,4 +153,13 @@ public class WorkoutController : ControllerBase
     }
 
     #endregion
+
+    // Example: Use CurrentUser to get weekly program
+    // [HttpGet("weekly-program")]
+    // public async Task<IActionResult> GetWeeklyProgram([FromServices] IWorkoutManager workoutManager)
+    // {
+    //     if (CurrentUser == null) return Unauthorized();
+    //     var program = await workoutManager.GetWeeklyProgramForUser(CurrentUser.Id);
+    //     return Ok(program);
+    // }
 } 

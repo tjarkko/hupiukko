@@ -43,75 +43,75 @@ import type {
 
 
 
-export const getWorkoutProgramsUserUserId = (
-    userId: string, options?: AxiosRequestConfig
+export const getWorkoutPrograms = (
+     options?: AxiosRequestConfig
  ): Promise<AxiosResponse<WorkoutProgramDto[]>> => {
     
     
     return axios.get(
-      `/api/proxy/Workout/programs/user/${userId}`,options
+      `/api/proxy/Workout/programs`,options
     );
   }
 
 
-export const getGetWorkoutProgramsUserUserIdQueryKey = (userId: string,) => {
-    return [`/api/proxy/Workout/programs/user/${userId}`] as const;
+export const getGetWorkoutProgramsQueryKey = () => {
+    return [`/api/proxy/Workout/programs`] as const;
     }
 
     
-export const getGetWorkoutProgramsUserUserIdQueryOptions = <TData = Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError = AxiosError<unknown>>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetWorkoutProgramsQueryOptions = <TData = Awaited<ReturnType<typeof getWorkoutPrograms>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutPrograms>>, TError, TData>>, axios?: AxiosRequestConfig}
 ) => {
 
 const {query: queryOptions, axios: axiosOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetWorkoutProgramsUserUserIdQueryKey(userId);
+  const queryKey =  queryOptions?.queryKey ?? getGetWorkoutProgramsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>> = ({ signal }) => getWorkoutProgramsUserUserId(userId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkoutPrograms>>> = ({ signal }) => getWorkoutPrograms({ signal, ...axiosOptions });
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWorkoutPrograms>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetWorkoutProgramsUserUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>>
-export type GetWorkoutProgramsUserUserIdQueryError = AxiosError<unknown>
+export type GetWorkoutProgramsQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkoutPrograms>>>
+export type GetWorkoutProgramsQueryError = AxiosError<unknown>
 
 
-export function useGetWorkoutProgramsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError, TData>> & Pick<
+export function useGetWorkoutPrograms<TData = Awaited<ReturnType<typeof getWorkoutPrograms>>, TError = AxiosError<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutPrograms>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>,
+          Awaited<ReturnType<typeof getWorkoutPrograms>>,
           TError,
-          Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>
+          Awaited<ReturnType<typeof getWorkoutPrograms>>
         > , 'initialData'
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetWorkoutProgramsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError, TData>> & Pick<
+export function useGetWorkoutPrograms<TData = Awaited<ReturnType<typeof getWorkoutPrograms>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutPrograms>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>,
+          Awaited<ReturnType<typeof getWorkoutPrograms>>,
           TError,
-          Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>
+          Awaited<ReturnType<typeof getWorkoutPrograms>>
         > , 'initialData'
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetWorkoutProgramsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetWorkoutPrograms<TData = Awaited<ReturnType<typeof getWorkoutPrograms>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutPrograms>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetWorkoutProgramsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutProgramsUserUserId>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetWorkoutPrograms<TData = Awaited<ReturnType<typeof getWorkoutPrograms>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutPrograms>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetWorkoutProgramsUserUserIdQueryOptions(userId,options)
+  const queryOptions = getGetWorkoutProgramsQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -122,25 +122,24 @@ export function useGetWorkoutProgramsUserUserId<TData = Awaited<ReturnType<typeo
 
 
 
-export const postWorkoutProgramsUserUserId = (
-    userId: string,
+export const postWorkoutPrograms = (
     createWorkoutProgramRequest: CreateWorkoutProgramRequest, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<WorkoutProgramDto>> => {
     
     
     return axios.post(
-      `/api/proxy/Workout/programs/user/${userId}`,
+      `/api/proxy/Workout/programs`,
       createWorkoutProgramRequest,options
     );
   }
 
 
 
-export const getPostWorkoutProgramsUserUserIdMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutProgramsUserUserId>>, TError,{userId: string;data: CreateWorkoutProgramRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof postWorkoutProgramsUserUserId>>, TError,{userId: string;data: CreateWorkoutProgramRequest}, TContext> => {
+export const getPostWorkoutProgramsMutationOptions = <TError = AxiosError<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutPrograms>>, TError,{data: CreateWorkoutProgramRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof postWorkoutPrograms>>, TError,{data: CreateWorkoutProgramRequest}, TContext> => {
 
-const mutationKey = ['postWorkoutProgramsUserUserId'];
+const mutationKey = ['postWorkoutPrograms'];
 const {mutation: mutationOptions, axios: axiosOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -150,10 +149,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWorkoutProgramsUserUserId>>, {userId: string;data: CreateWorkoutProgramRequest}> = (props) => {
-          const {userId,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWorkoutPrograms>>, {data: CreateWorkoutProgramRequest}> = (props) => {
+          const {data} = props ?? {};
 
-          return  postWorkoutProgramsUserUserId(userId,data,axiosOptions)
+          return  postWorkoutPrograms(data,axiosOptions)
         }
 
         
@@ -161,20 +160,20 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type PostWorkoutProgramsUserUserIdMutationResult = NonNullable<Awaited<ReturnType<typeof postWorkoutProgramsUserUserId>>>
-    export type PostWorkoutProgramsUserUserIdMutationBody = CreateWorkoutProgramRequest
-    export type PostWorkoutProgramsUserUserIdMutationError = AxiosError<unknown>
+    export type PostWorkoutProgramsMutationResult = NonNullable<Awaited<ReturnType<typeof postWorkoutPrograms>>>
+    export type PostWorkoutProgramsMutationBody = CreateWorkoutProgramRequest
+    export type PostWorkoutProgramsMutationError = AxiosError<unknown>
 
-    export const usePostWorkoutProgramsUserUserId = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutProgramsUserUserId>>, TError,{userId: string;data: CreateWorkoutProgramRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const usePostWorkoutPrograms = <TError = AxiosError<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutPrograms>>, TError,{data: CreateWorkoutProgramRequest}, TContext>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postWorkoutProgramsUserUserId>>,
+        Awaited<ReturnType<typeof postWorkoutPrograms>>,
         TError,
-        {userId: string;data: CreateWorkoutProgramRequest},
+        {data: CreateWorkoutProgramRequest},
         TContext
       > => {
 
-      const mutationOptions = getPostWorkoutProgramsUserUserIdMutationOptions(options);
+      const mutationOptions = getPostWorkoutProgramsMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -257,75 +256,75 @@ export function useGetWorkoutProgramsId<TData = Awaited<ReturnType<typeof getWor
 
 
 
-export const getWorkoutSessionsUserUserId = (
-    userId: string, options?: AxiosRequestConfig
+export const getWorkoutSessions = (
+     options?: AxiosRequestConfig
  ): Promise<AxiosResponse<WorkoutSessionDto[]>> => {
     
     
     return axios.get(
-      `/api/proxy/Workout/sessions/user/${userId}`,options
+      `/api/proxy/Workout/sessions`,options
     );
   }
 
 
-export const getGetWorkoutSessionsUserUserIdQueryKey = (userId: string,) => {
-    return [`/api/proxy/Workout/sessions/user/${userId}`] as const;
+export const getGetWorkoutSessionsQueryKey = () => {
+    return [`/api/proxy/Workout/sessions`] as const;
     }
 
     
-export const getGetWorkoutSessionsUserUserIdQueryOptions = <TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError = AxiosError<unknown>>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetWorkoutSessionsQueryOptions = <TData = Awaited<ReturnType<typeof getWorkoutSessions>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessions>>, TError, TData>>, axios?: AxiosRequestConfig}
 ) => {
 
 const {query: queryOptions, axios: axiosOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetWorkoutSessionsUserUserIdQueryKey(userId);
+  const queryKey =  queryOptions?.queryKey ?? getGetWorkoutSessionsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>> = ({ signal }) => getWorkoutSessionsUserUserId(userId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkoutSessions>>> = ({ signal }) => getWorkoutSessions({ signal, ...axiosOptions });
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetWorkoutSessionsUserUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>>
-export type GetWorkoutSessionsUserUserIdQueryError = AxiosError<unknown>
+export type GetWorkoutSessionsQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkoutSessions>>>
+export type GetWorkoutSessionsQueryError = AxiosError<unknown>
 
 
-export function useGetWorkoutSessionsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError, TData>> & Pick<
+export function useGetWorkoutSessions<TData = Awaited<ReturnType<typeof getWorkoutSessions>>, TError = AxiosError<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessions>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>,
+          Awaited<ReturnType<typeof getWorkoutSessions>>,
           TError,
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>
+          Awaited<ReturnType<typeof getWorkoutSessions>>
         > , 'initialData'
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetWorkoutSessionsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError, TData>> & Pick<
+export function useGetWorkoutSessions<TData = Awaited<ReturnType<typeof getWorkoutSessions>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessions>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>,
+          Awaited<ReturnType<typeof getWorkoutSessions>>,
           TError,
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>
+          Awaited<ReturnType<typeof getWorkoutSessions>>
         > , 'initialData'
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetWorkoutSessionsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetWorkoutSessions<TData = Awaited<ReturnType<typeof getWorkoutSessions>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessions>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetWorkoutSessionsUserUserId<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserId>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetWorkoutSessions<TData = Awaited<ReturnType<typeof getWorkoutSessions>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessions>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetWorkoutSessionsUserUserIdQueryOptions(userId,options)
+  const queryOptions = getGetWorkoutSessionsQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -415,75 +414,75 @@ export function useGetWorkoutSessionsId<TData = Awaited<ReturnType<typeof getWor
 
 
 
-export const getWorkoutSessionsUserUserIdActive = (
-    userId: string, options?: AxiosRequestConfig
+export const getWorkoutSessionsActive = (
+     options?: AxiosRequestConfig
  ): Promise<AxiosResponse<WorkoutSessionDto>> => {
     
     
     return axios.get(
-      `/api/proxy/Workout/sessions/user/${userId}/active`,options
+      `/api/proxy/Workout/sessions/active`,options
     );
   }
 
 
-export const getGetWorkoutSessionsUserUserIdActiveQueryKey = (userId: string,) => {
-    return [`/api/proxy/Workout/sessions/user/${userId}/active`] as const;
+export const getGetWorkoutSessionsActiveQueryKey = () => {
+    return [`/api/proxy/Workout/sessions/active`] as const;
     }
 
     
-export const getGetWorkoutSessionsUserUserIdActiveQueryOptions = <TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError = AxiosError<unknown>>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetWorkoutSessionsActiveQueryOptions = <TData = Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError, TData>>, axios?: AxiosRequestConfig}
 ) => {
 
 const {query: queryOptions, axios: axiosOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetWorkoutSessionsUserUserIdActiveQueryKey(userId);
+  const queryKey =  queryOptions?.queryKey ?? getGetWorkoutSessionsActiveQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>> = ({ signal }) => getWorkoutSessionsUserUserIdActive(userId, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkoutSessionsActive>>> = ({ signal }) => getWorkoutSessionsActive({ signal, ...axiosOptions });
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetWorkoutSessionsUserUserIdActiveQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>>
-export type GetWorkoutSessionsUserUserIdActiveQueryError = AxiosError<unknown>
+export type GetWorkoutSessionsActiveQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkoutSessionsActive>>>
+export type GetWorkoutSessionsActiveQueryError = AxiosError<unknown>
 
 
-export function useGetWorkoutSessionsUserUserIdActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError = AxiosError<unknown>>(
- userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError, TData>> & Pick<
+export function useGetWorkoutSessionsActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError = AxiosError<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>,
+          Awaited<ReturnType<typeof getWorkoutSessionsActive>>,
           TError,
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>
+          Awaited<ReturnType<typeof getWorkoutSessionsActive>>
         > , 'initialData'
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetWorkoutSessionsUserUserIdActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError, TData>> & Pick<
+export function useGetWorkoutSessionsActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>,
+          Awaited<ReturnType<typeof getWorkoutSessionsActive>>,
           TError,
-          Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>
+          Awaited<ReturnType<typeof getWorkoutSessionsActive>>
         > , 'initialData'
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetWorkoutSessionsUserUserIdActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetWorkoutSessionsActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetWorkoutSessionsUserUserIdActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError = AxiosError<unknown>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsUserUserIdActive>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetWorkoutSessionsActive<TData = Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkoutSessionsActive>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetWorkoutSessionsUserUserIdActiveQueryOptions(userId,options)
+  const queryOptions = getGetWorkoutSessionsActiveQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -494,25 +493,24 @@ export function useGetWorkoutSessionsUserUserIdActive<TData = Awaited<ReturnType
 
 
 
-export const postWorkoutSessionsUserUserIdStart = (
-    userId: string,
+export const postWorkoutSessionsStart = (
     startWorkoutRequest: StartWorkoutRequest, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<WorkoutSessionDto>> => {
     
     
     return axios.post(
-      `/api/proxy/Workout/sessions/user/${userId}/start`,
+      `/api/proxy/Workout/sessions/start`,
       startWorkoutRequest,options
     );
   }
 
 
 
-export const getPostWorkoutSessionsUserUserIdStartMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutSessionsUserUserIdStart>>, TError,{userId: string;data: StartWorkoutRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof postWorkoutSessionsUserUserIdStart>>, TError,{userId: string;data: StartWorkoutRequest}, TContext> => {
+export const getPostWorkoutSessionsStartMutationOptions = <TError = AxiosError<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutSessionsStart>>, TError,{data: StartWorkoutRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof postWorkoutSessionsStart>>, TError,{data: StartWorkoutRequest}, TContext> => {
 
-const mutationKey = ['postWorkoutSessionsUserUserIdStart'];
+const mutationKey = ['postWorkoutSessionsStart'];
 const {mutation: mutationOptions, axios: axiosOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -522,10 +520,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWorkoutSessionsUserUserIdStart>>, {userId: string;data: StartWorkoutRequest}> = (props) => {
-          const {userId,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWorkoutSessionsStart>>, {data: StartWorkoutRequest}> = (props) => {
+          const {data} = props ?? {};
 
-          return  postWorkoutSessionsUserUserIdStart(userId,data,axiosOptions)
+          return  postWorkoutSessionsStart(data,axiosOptions)
         }
 
         
@@ -533,20 +531,20 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type PostWorkoutSessionsUserUserIdStartMutationResult = NonNullable<Awaited<ReturnType<typeof postWorkoutSessionsUserUserIdStart>>>
-    export type PostWorkoutSessionsUserUserIdStartMutationBody = StartWorkoutRequest
-    export type PostWorkoutSessionsUserUserIdStartMutationError = AxiosError<unknown>
+    export type PostWorkoutSessionsStartMutationResult = NonNullable<Awaited<ReturnType<typeof postWorkoutSessionsStart>>>
+    export type PostWorkoutSessionsStartMutationBody = StartWorkoutRequest
+    export type PostWorkoutSessionsStartMutationError = AxiosError<unknown>
 
-    export const usePostWorkoutSessionsUserUserIdStart = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutSessionsUserUserIdStart>>, TError,{userId: string;data: StartWorkoutRequest}, TContext>, axios?: AxiosRequestConfig}
+    export const usePostWorkoutSessionsStart = <TError = AxiosError<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWorkoutSessionsStart>>, TError,{data: StartWorkoutRequest}, TContext>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postWorkoutSessionsUserUserIdStart>>,
+        Awaited<ReturnType<typeof postWorkoutSessionsStart>>,
         TError,
-        {userId: string;data: StartWorkoutRequest},
+        {data: StartWorkoutRequest},
         TContext
       > => {
 
-      const mutationOptions = getPostWorkoutSessionsUserUserIdStartMutationOptions(options);
+      const mutationOptions = getPostWorkoutSessionsStartMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

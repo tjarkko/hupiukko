@@ -6,7 +6,7 @@ namespace Hupiukko.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ExercisesController : ControllerBase
+public class ExercisesController : BaseApiController
 {
     private readonly IExercisesManager _exercisesManager;
 

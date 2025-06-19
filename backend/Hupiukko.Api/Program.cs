@@ -75,11 +75,42 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         var azureAd = builder.Configuration.GetSection("AzureAd");
         options.Authority = $"{azureAd["Instance"]}{azureAd["TenantId"]}/v2.0";
-        options.Audience = azureAd["Audience"];
+        // Accept both the Application ID URI and the client ID as valid audiences
+        options.TokenValidationParameters.ValidAudiences = new[]
+        {
+            azureAd["Audience"],
+            azureAd["ClientId"]
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogError(context.Exception, "Authentication failed.");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogInformation("Token validated for {sub}", context.Principal?.FindFirst("sub")?.Value);
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("Authentication challenge: {Error} - {ErrorDescription}", context.Error, context.ErrorDescription);
+                return Task.CompletedTask;
+            }
+        };
     });
 
 // Add Authorization
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 // Add CORS for development
 builder.Services.AddCors(options =>
@@ -113,6 +144,8 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<UserProvisioningMiddleware>();
 
 app.MapControllers();
 

@@ -6,7 +6,7 @@ namespace Hupiukko.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UsersController : ControllerBase
+public class UsersController : BaseApiController
 {
     private readonly IUsersManager _usersManager;
 
