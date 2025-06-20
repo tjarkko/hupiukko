@@ -11,7 +11,7 @@ public class WorkoutProgram : BaseEntity
 
     // Navigation properties
     public virtual User User { get; set; } = null!;
-    public virtual ICollection<ProgramExercise> ProgramExercises { get; set; } = new List<ProgramExercise>();
     public virtual ICollection<WorkoutSession> WorkoutSessions { get; set; } = new List<WorkoutSession>();
     public virtual ICollection<ProgramSuggestion> ProgramSuggestions { get; set; } = new List<ProgramSuggestion>();
+    public virtual ICollection<WorkoutDay> WorkoutDays { get; set; } = new List<WorkoutDay>();
 } 

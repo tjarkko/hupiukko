@@ -18,4 +18,8 @@ public interface IWorkoutManager
 
     // Workout Sets
     Task<WorkoutSetDto> CompleteSetAsync(Guid setId, CompleteSetRequest request);
+
+    // Add signatures for WorkoutDay CRUD if needed
+    // Task<WorkoutDayDto> CreateWorkoutDayAsync(...);
+    // Task<List<WorkoutDayDto>> GetWorkoutDaysForProgramAsync(Guid programId);
 } 

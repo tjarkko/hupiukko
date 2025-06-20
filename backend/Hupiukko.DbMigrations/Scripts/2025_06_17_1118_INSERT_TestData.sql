@@ -51,16 +51,26 @@ INSERT INTO WorkoutPrograms (Id, UserId, Name, Description, IsActive, StartDate,
 VALUES 
     (@ProgramId, @UserId, 'Beginner Full Body', 'A simple full-body workout for beginners', 1, GETUTCDATE(), GETUTCDATE(), GETUTCDATE(), 0);
 
--- Insert Program Exercises
+-- Insert WorkoutDays
+DECLARE @Day1Id UNIQUEIDENTIFIER = NEWID();
+DECLARE @Day2Id UNIQUEIDENTIFIER = NEWID();
+DECLARE @Day3Id UNIQUEIDENTIFIER = NEWID();
+INSERT INTO WorkoutDays (Id, ProgramId, Name, DayOfWeek, SortOrder, Notes, CreatedAt, UpdatedAt, IsDeleted, RowVersion)
+VALUES
+    (@Day1Id, @ProgramId, 'Day 1 - Push-ups', 1, 1, 'Push focus', GETUTCDATE(), GETUTCDATE(), 0, DEFAULT),
+    (@Day2Id, @ProgramId, 'Day 2 - Squats', 3, 2, 'Leg focus', GETUTCDATE(), GETUTCDATE(), 0, DEFAULT),
+    (@Day3Id, @ProgramId, 'Day 3 - Plank', 0, 3, 'Core focus', GETUTCDATE(), GETUTCDATE(), 0, DEFAULT);
+
+-- Insert Program Exercises (now reference WorkoutDayId)
 DECLARE @ProgramExercise1 UNIQUEIDENTIFIER = NEWID();
 DECLARE @ProgramExercise2 UNIQUEIDENTIFIER = NEWID();
 DECLARE @ProgramExercise3 UNIQUEIDENTIFIER = NEWID();
 
-INSERT INTO ProgramExercises (Id, ProgramId, ExerciseId, SortOrder, TargetSets, DefaultRepsMin, DefaultRepsMax, DefaultWeight, DefaultRestTimeSeconds, CreatedAt, UpdatedAt, IsDeleted)
+INSERT INTO ProgramExercises (Id, WorkoutDayId, ExerciseId, SortOrder, TargetSets, DefaultRepsMin, DefaultRepsMax, DefaultWeight, DefaultRestTimeSeconds, Notes, CreatedAt, UpdatedAt, IsDeleted, RowVersion)
 VALUES 
-    (@ProgramExercise1, @ProgramId, @PushUpId, 1, 3, 8, 12, NULL, 60, GETUTCDATE(), GETUTCDATE(), 0),
-    (@ProgramExercise2, @ProgramId, @SquatId, 2, 3, 10, 15, NULL, 90, GETUTCDATE(), GETUTCDATE(), 0),
-    (@ProgramExercise3, @ProgramId, @PlankId, 3, 3, 30, 60, NULL, 60, GETUTCDATE(), GETUTCDATE(), 0);
+    (@ProgramExercise1, @Day1Id, @PushUpId, 1, 3, 8, 12, NULL, 60, NULL, GETUTCDATE(), GETUTCDATE(), 0, DEFAULT),
+    (@ProgramExercise2, @Day2Id, @SquatId, 1, 3, 10, 15, NULL, 90, NULL, GETUTCDATE(), GETUTCDATE(), 0, DEFAULT),
+    (@ProgramExercise3, @Day3Id, @PlankId, 1, 3, 30, 60, NULL, 60, NULL, GETUTCDATE(), GETUTCDATE(), 0, DEFAULT);
 
 -- Insert Program Exercise Sets (example of pyramid sets for push-ups)
 INSERT INTO ProgramExerciseSets (Id, ProgramExerciseId, SetNumber, TargetRepsMin, TargetRepsMax, TargetWeight, RestTimeSeconds, Notes, CreatedAt, UpdatedAt, IsDeleted)

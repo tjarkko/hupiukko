@@ -13,15 +13,26 @@ public class WorkoutProgramDto
     public bool IsActive { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    public List<ProgramExerciseDto> ProgramExercises { get; set; } = new();
+    public List<WorkoutDayDto> WorkoutDays { get; set; } = new();
     public List<WorkoutSessionDto> WorkoutSessions { get; set; } = new();
     public List<ProgramSuggestionDto> ProgramSuggestions { get; set; } = new();
 }
 
-// Minimal ProgramExerciseDto for inclusion
+public class WorkoutDayDto
+{
+    public Guid Id { get; set; }
+    public Guid ProgramId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public Hupiukko.Api.BusinessLogic.Models.DayOfWeek? DayOfWeek { get; set; }
+    public int SortOrder { get; set; }
+    public string? Notes { get; set; }
+    public List<ProgramExerciseDto> ProgramExercises { get; set; } = new();
+}
+
 public class ProgramExerciseDto
 {
     public Guid Id { get; set; }
+    public Guid WorkoutDayId { get; set; }
     public Guid ExerciseId { get; set; }
     public int SortOrder { get; set; }
     public int TargetSets { get; set; }
@@ -31,7 +42,6 @@ public class ProgramExerciseDto
     public int? DefaultRestTimeSeconds { get; set; }
     public string? Notes { get; set; }
     public List<ProgramExerciseSetDto> ProgramExerciseSets { get; set; } = new();
-    public Hupiukko.Api.BusinessLogic.Models.DayOfWeek? DayOfWeek { get; set; } // 0=Sunday, 1=Monday, ..., 6=Saturday
 }
 
 public class ProgramExerciseSetDto

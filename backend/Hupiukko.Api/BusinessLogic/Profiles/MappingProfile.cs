@@ -26,5 +26,8 @@ public class MappingProfile : Profile
         CreateMap<ExerciseCategory, ExerciseCategoryDto>();
         CreateMap<Exercise, ExerciseDto>();
         CreateMap<User, UserDto>();
+
+        CreateMap<WorkoutDay, WorkoutDayDto>();
+        CreateMap<CreateWorkoutDayRequest, WorkoutDay>();
     }
 } 

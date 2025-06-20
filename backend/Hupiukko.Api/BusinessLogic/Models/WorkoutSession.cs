@@ -8,6 +8,7 @@ public class WorkoutSession : BaseEntity
     public DateTime? EndTime { get; set; }
     public string? Notes { get; set; }
     public bool IsCompleted { get; set; }
+    public Guid? WorkoutDayId { get; set; }
 
     // Computed property for duration
     public int? DurationMinutes => EndTime.HasValue ? 
@@ -17,4 +18,5 @@ public class WorkoutSession : BaseEntity
     public virtual User User { get; set; } = null!;
     public virtual WorkoutProgram Program { get; set; } = null!;
     public virtual ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
+    public virtual WorkoutDay? WorkoutDay { get; set; }
 } 

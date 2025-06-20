@@ -45,7 +45,6 @@ export interface CreateProgramExerciseRequest {
   defaultRestTimeSeconds?: number | null;
   /** @nullable */
   notes?: string | null;
-  dayOfWeek?: DayOfWeek;
   /** @nullable */
   programExerciseSets?: CreateProgramExerciseSetRequest[] | null;
 }
@@ -76,6 +75,17 @@ export interface CreateUserRequest {
   timeZone?: string | null;
 }
 
+export interface CreateWorkoutDayRequest {
+  /** @nullable */
+  name?: string | null;
+  dayOfWeek?: DayOfWeek;
+  sortOrder?: number;
+  /** @nullable */
+  notes?: string | null;
+  /** @nullable */
+  programExercises?: CreateProgramExerciseRequest[] | null;
+}
+
 export interface CreateWorkoutProgramRequest {
   /** @nullable */
   name?: string | null;
@@ -86,7 +96,7 @@ export interface CreateWorkoutProgramRequest {
   /** @nullable */
   endDate?: string | null;
   /** @nullable */
-  programExercises?: CreateProgramExerciseRequest[] | null;
+  workoutDays?: CreateWorkoutDayRequest[] | null;
 }
 
 export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];
@@ -136,6 +146,7 @@ export interface ExerciseDto {
 
 export interface ProgramExerciseDto {
   id?: string;
+  workoutDayId?: string;
   exerciseId?: string;
   sortOrder?: number;
   targetSets?: number;
@@ -150,7 +161,6 @@ export interface ProgramExerciseDto {
   notes?: string | null;
   /** @nullable */
   programExerciseSets?: ProgramExerciseSetDto[] | null;
-  dayOfWeek?: DayOfWeek;
 }
 
 export interface ProgramExerciseSetDto {
@@ -183,6 +193,8 @@ export interface ProgramSuggestionDto {
 
 export interface StartWorkoutRequest {
   programId?: string;
+  /** @nullable */
+  workoutDayId?: string | null;
 }
 
 export interface UserDto {
@@ -198,6 +210,19 @@ export interface UserDto {
   /** @nullable */
   timeZone?: string | null;
   createdAt?: string;
+}
+
+export interface WorkoutDayDto {
+  id?: string;
+  programId?: string;
+  /** @nullable */
+  name?: string | null;
+  dayOfWeek?: DayOfWeek;
+  sortOrder?: number;
+  /** @nullable */
+  notes?: string | null;
+  /** @nullable */
+  programExercises?: ProgramExerciseDto[] | null;
 }
 
 export interface WorkoutExerciseDto {
@@ -223,7 +248,7 @@ export interface WorkoutProgramDto {
   /** @nullable */
   endDate?: string | null;
   /** @nullable */
-  programExercises?: ProgramExerciseDto[] | null;
+  workoutDays?: WorkoutDayDto[] | null;
   /** @nullable */
   workoutSessions?: WorkoutSessionDto[] | null;
   /** @nullable */

@@ -10,6 +10,15 @@ public class CreateWorkoutProgramRequest
     public bool IsActive { get; set; } = true;
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
+    public List<CreateWorkoutDayRequest> WorkoutDays { get; set; } = new();
+}
+
+public class CreateWorkoutDayRequest
+{
+    public string Name { get; set; } = string.Empty;
+    public Hupiukko.Api.BusinessLogic.Models.DayOfWeek? DayOfWeek { get; set; }
+    public int SortOrder { get; set; }
+    public string? Notes { get; set; }
     public List<CreateProgramExerciseRequest> ProgramExercises { get; set; } = new();
 }
 
@@ -23,7 +32,6 @@ public class CreateProgramExerciseRequest
     public decimal? DefaultWeight { get; set; }
     public int? DefaultRestTimeSeconds { get; set; }
     public string? Notes { get; set; }
-    public Hupiukko.Api.BusinessLogic.Models.DayOfWeek? DayOfWeek { get; set; } // 0=Sunday, 1=Monday, ..., 6=Saturday
     public List<CreateProgramExerciseSetRequest> ProgramExerciseSets { get; set; } = new();
 }
 

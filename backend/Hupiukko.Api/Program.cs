@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Any;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +88,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             {
                 var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
                 logger.LogError(context.Exception, "Authentication failed.");
+                // Do NOT write to the response here!
                 return Task.CompletedTask;
             },
             OnTokenValidated = context =>
@@ -97,8 +99,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             },
             OnChallenge = context =>
             {
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                logger.LogWarning("Authentication challenge: {Error} - {ErrorDescription}", context.Error, context.ErrorDescription);
+                if (!context.Response.HasStarted)
+                {
+                    context.HandleResponse(); // Suppress the default logic
+                    context.Response.StatusCode = 401;
+                    context.Response.ContentType = "application/json";
+                    var error = context.ErrorDescription?.ToLowerInvariant();
+                    if (error != null && error.Contains("expired"))
+                    {
+                        return context.Response.WriteAsync("{\"error\": \"token expired\"}");
+                    }
+                    return context.Response.WriteAsync("{\"error\": \"authentication failed\"}");
+                }
                 return Task.CompletedTask;
             }
         };

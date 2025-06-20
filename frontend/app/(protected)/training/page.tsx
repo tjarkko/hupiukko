@@ -3,7 +3,8 @@ import { Box, Button, Grid, Typography, Paper } from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useGetWorkoutPrograms } from "../../../api/generated/workout/workout";
-import { ProgramExerciseDto, WorkoutProgramDto } from "../../../api/generated/hupiukkoAPI.schemas";
+import { ProgramExerciseDto, WorkoutProgramDto, WorkoutDayDto, ExerciseDto } from "../../../api/generated/hupiukkoAPI.schemas";
+import { useGetExercises } from "../../../api/generated/exercises/exercises";
 
 
 const days = [
@@ -17,7 +18,6 @@ const days = [
 ];
 
 export default function TrainingPage() {
-  const [selectedDay, setSelectedDay] = useState("Monday");
   const { data: session } = useSession();
   const userName = session?.user?.name || "User";
 
@@ -27,18 +27,26 @@ export default function TrainingPage() {
   // Use the first (active) program for now
   const program = programs.find((p) => p.isActive) || programs[0];
 
-  // Map exercises by day
-  const exercisesByDay: Record<string, ProgramExerciseDto[]> = {};
-  if (program?.programExercises) {
-    for (const ex of program.programExercises) {
-      if (ex.dayOfWeek) {
-        if (!exercisesByDay[ex.dayOfWeek]) exercisesByDay[ex.dayOfWeek] = [];
-        exercisesByDay[ex.dayOfWeek].push(ex);
-      }
-    }
-  }
+  // Fetch all exercises for name lookup
+  const { data: exercisesData } = useGetExercises();
+  const exercises: ExerciseDto[] = exercisesData?.data || [];
+  const exerciseMap = Object.fromEntries(
+    exercises.map((ex) => [ex.id, ex.name])
+  );
 
-  const selectedExercises = exercisesByDay[selectedDay] || [];
+  // Get workout days from the program
+  const workoutDays: WorkoutDayDto[] = program?.workoutDays || [];
+
+  // Helper: Map day key to workoutDay
+  const workoutDayMap = Object.fromEntries(
+    workoutDays.map((d) => [d.dayOfWeek || d.name, d])
+  );
+
+  // Selected day logic: allow selecting any weekday
+  const [selectedDayKey, setSelectedDayKey] = useState<string>(days[0].key);
+  const selectedWorkoutDay = workoutDayMap[selectedDayKey];
+  const selectedExercises =
+    selectedWorkoutDay?.programExercises?.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)) || [];
 
   return (
     <Box p={2}>
@@ -49,35 +57,62 @@ export default function TrainingPage() {
         Training Program
       </Typography>
       <Grid container spacing={1} justifyContent="center" mb={2}>
-        {days.map((day) => (
-          <Grid key={day.key} size={2}>
-            <Paper
-              onClick={() => setSelectedDay(day.key)}
-              sx={{
-                p: 1,
-                textAlign: "center",
-                cursor: "pointer",
-                bgcolor: selectedDay === day.key ? "primary.main" : "grey.100",
-                color: selectedDay === day.key ? "primary.contrastText" : "text.primary",
-                fontWeight: selectedDay === day.key ? 600 : 400,
-              }}
-              elevation={selectedDay === day.key ? 4 : 1}
-            >
-              {day.label}
-            </Paper>
-          </Grid>
-        ))}
+        {days.map((day) => {
+          const workoutDay = workoutDayMap[day.key];
+          const hasExercises =
+            workoutDay && workoutDay.programExercises && workoutDay.programExercises.length > 0;
+          return (
+            <Grid key={day.key} >
+              <Paper
+                onClick={() => setSelectedDayKey(day.key)}
+                sx={{
+                  p: 1,
+                  textAlign: "center",
+                  cursor: "pointer",
+                  bgcolor: selectedDayKey === day.key ? "primary.main" : "grey.100",
+                  color: selectedDayKey === day.key ? "primary.contrastText" : "text.primary",
+                  fontWeight: selectedDayKey === day.key ? 600 : 400,
+                  border: hasExercises ? "2px solid #1976d2" : undefined,
+                  position: "relative",
+                  minWidth: 48,
+                }}
+                elevation={selectedDayKey === day.key ? 4 : 1}
+              >
+                <span style={{ fontWeight: hasExercises ? 700 : 400 }}>
+                  {day.label}
+                </span>
+                {hasExercises && (
+                  <span
+                    style={{
+                      display: "block",
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: selectedDayKey === day.key ? "#fff" : "#1976d2",
+                      position: "absolute",
+                      bottom: 4,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                    }}
+                  />
+                )}
+              </Paper>
+            </Grid>
+          );
+        })}
       </Grid>
       <Box textAlign="center" mt={4}>
         {isLoading ? (
           <Typography>Loading...</Typography>
         ) : error ? (
           <Typography color="error">Failed to load program.</Typography>
-        ) : selectedExercises.length > 0 ? (
+        ) : selectedWorkoutDay && selectedExercises.length > 0 ? (
           selectedExercises.map((exercise) => (
             <Box key={exercise.id} mb={2}>
               <Typography variant="subtitle1" mb={1}>
-                {exercise.exerciseId} {/* Replace with exercise name if available */}
+                {exercise.exerciseId && exerciseMap[exercise.exerciseId]
+                  ? exerciseMap[exercise.exerciseId]
+                  : exercise.exerciseId}
               </Typography>
               <Button variant="contained" color="primary">
                 Start Exercise

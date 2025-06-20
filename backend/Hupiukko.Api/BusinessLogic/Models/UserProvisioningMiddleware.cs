@@ -6,6 +6,7 @@ using Hupiukko.Api.BusinessLogic.Models;
 using Hupiukko.Api.Dtos;
 using Hupiukko.Api.BusinessLogic.Managers;
 using Microsoft.Extensions.Logging;
+using Hupiukko.Api.BusinessLogic.Utility;
 
 public class UserProvisioningMiddleware
 {
@@ -76,56 +77,7 @@ public class UserProvisioningMiddleware
                 // TEMP: Create a default program for new users
                 if (userWasCreated)
                 {
-                    // Fetch real exercise IDs from the DB by name
-                    var benchPress = await db.Exercises.FirstOrDefaultAsync(e => e.Name == "Bench Press");
-                    var squat = await db.Exercises.FirstOrDefaultAsync(e => e.Name == "Squat");
-                    var deadlift = await db.Exercises.FirstOrDefaultAsync(e => e.Name == "Deadlift");
-
-                    var defaultExercises = new List<CreateProgramExerciseRequest>();
-                    int sortOrder = 1;
-                    if (benchPress != null)
-                    {
-                        defaultExercises.Add(new CreateProgramExerciseRequest
-                        {
-                            ExerciseId = benchPress.Id,
-                            SortOrder = sortOrder++,
-                            TargetSets = 3,
-                            DefaultRepsMin = 10,
-                            DayOfWeek = Hupiukko.Api.BusinessLogic.Models.DayOfWeek.Monday
-                        });
-                    }
-                    if (squat != null)
-                    {
-                        defaultExercises.Add(new CreateProgramExerciseRequest
-                        {
-                            ExerciseId = squat.Id,
-                            SortOrder = sortOrder++,
-                            TargetSets = 4,
-                            DefaultRepsMin = 8,
-                            DayOfWeek = Hupiukko.Api.BusinessLogic.Models.DayOfWeek.Wednesday
-                        });
-                    }
-                    if (deadlift != null)
-                    {
-                        defaultExercises.Add(new CreateProgramExerciseRequest
-                        {
-                            ExerciseId = deadlift.Id,
-                            SortOrder = sortOrder++,
-                            TargetSets = 5,
-                            DefaultRepsMin = 5,
-                            DayOfWeek = Hupiukko.Api.BusinessLogic.Models.DayOfWeek.Friday
-                        });
-                    }
-
-                    var defaultProgram = new CreateWorkoutProgramRequest
-                    {
-                        Name = "Starter Program",
-                        Description = "A default program created for new users.",
-                        IsActive = true,
-                        StartDate = DateTime.UtcNow,
-                        ProgramExercises = defaultExercises
-                    };
-                    await workoutManager.CreateProgramAsync(user.Id, defaultProgram);
+                    await DefaultProgramSeeder.CreateDefaultProgramForUserAsync(user, db, workoutManager);
                 }
 
                 // Attach user to HttpContext.Items for controller access

@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
     public DbSet<WorkoutSet> WorkoutSets { get; set; }
     public DbSet<ProgramSuggestion> ProgramSuggestions { get; set; }
+    public DbSet<WorkoutDay> WorkoutDays { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

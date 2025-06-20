@@ -43,7 +43,7 @@ public class WorkoutController : BaseApiController
     }
 
     /// <summary>
-    /// Create a new workout program for current user
+    /// Create a new workout program for current user (with WorkoutDays)
     /// </summary>
     [HttpPost("programs")]
     public async Task<ActionResult<WorkoutProgramDto>> CreateProgram(CreateWorkoutProgramRequest request)
@@ -96,7 +96,7 @@ public class WorkoutController : BaseApiController
     }
 
     /// <summary>
-    /// Start a new workout session for current user
+    /// Start a new workout session for current user (optionally for a specific WorkoutDay)
     /// </summary>
     [HttpPost("sessions/start")]
     public async Task<ActionResult<WorkoutSessionDto>> StartWorkout(StartWorkoutRequest request)

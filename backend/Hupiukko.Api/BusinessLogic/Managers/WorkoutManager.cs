@@ -20,10 +20,12 @@ public class WorkoutManager : IWorkoutManager
     public async Task<List<WorkoutProgramDto>> GetUserProgramsAsync(Guid userId)
     {
         var programs = await _context.WorkoutPrograms
-            .Include(p => p.ProgramExercises)
-                .ThenInclude(pe => pe.Exercise)
-            .Include(p => p.ProgramExercises)
-                .ThenInclude(pe => pe.ProgramExerciseSets)
+            .Include(p => p.WorkoutDays)
+                .ThenInclude(d => d.ProgramExercises)
+                    .ThenInclude(pe => pe.Exercise)
+            .Include(p => p.WorkoutDays)
+                .ThenInclude(d => d.ProgramExercises)
+                    .ThenInclude(pe => pe.ProgramExerciseSets)
             .Where(p => p.UserId == userId)
             .OrderByDescending(p => p.IsActive)
             .ThenByDescending(p => p.StartDate)
@@ -35,10 +37,12 @@ public class WorkoutManager : IWorkoutManager
     public async Task<WorkoutProgramDto?> GetProgramByIdAsync(Guid id)
     {
         var program = await _context.WorkoutPrograms
-            .Include(p => p.ProgramExercises)
-                .ThenInclude(pe => pe.Exercise)
-            .Include(p => p.ProgramExercises)
-                .ThenInclude(pe => pe.ProgramExerciseSets)
+            .Include(p => p.WorkoutDays)
+                .ThenInclude(d => d.ProgramExercises)
+                    .ThenInclude(pe => pe.Exercise)
+            .Include(p => p.WorkoutDays)
+                .ThenInclude(d => d.ProgramExercises)
+                    .ThenInclude(pe => pe.ProgramExerciseSets)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         return program != null ? _mapper.Map<WorkoutProgramDto>(program) : null;
@@ -46,8 +50,42 @@ public class WorkoutManager : IWorkoutManager
 
     public async Task<WorkoutProgramDto> CreateProgramAsync(Guid userId, CreateWorkoutProgramRequest request)
     {
-        var program = _mapper.Map<WorkoutProgram>(request);
-        program.UserId = userId;
+        var program = new WorkoutProgram
+        {
+            UserId = userId,
+            Name = request.Name,
+            Description = request.Description,
+            IsActive = request.IsActive,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            WorkoutDays = request.WorkoutDays.Select(dayReq => new WorkoutDay
+            {
+                Name = dayReq.Name,
+                DayOfWeek = dayReq.DayOfWeek,
+                SortOrder = dayReq.SortOrder,
+                Notes = dayReq.Notes,
+                ProgramExercises = dayReq.ProgramExercises.Select(exReq => new ProgramExercise
+                {
+                    ExerciseId = exReq.ExerciseId,
+                    SortOrder = exReq.SortOrder,
+                    TargetSets = exReq.TargetSets,
+                    DefaultRepsMin = exReq.DefaultRepsMin,
+                    DefaultRepsMax = exReq.DefaultRepsMax,
+                    DefaultWeight = exReq.DefaultWeight,
+                    DefaultRestTimeSeconds = exReq.DefaultRestTimeSeconds,
+                    Notes = exReq.Notes,
+                    ProgramExerciseSets = exReq.ProgramExerciseSets.Select(setReq => new ProgramExerciseSet
+                    {
+                        SetNumber = setReq.SetNumber,
+                        TargetRepsMin = setReq.TargetRepsMin,
+                        TargetRepsMax = setReq.TargetRepsMax,
+                        TargetWeight = setReq.TargetWeight,
+                        RestTimeSeconds = setReq.RestTimeSeconds,
+                        Notes = setReq.Notes
+                    }).ToList()
+                }).ToList()
+            }).ToList()
+        };
 
         // Set current active program to inactive if this is active
         if (program.IsActive)
@@ -67,10 +105,12 @@ public class WorkoutManager : IWorkoutManager
 
         // Reload with includes for mapping
         await _context.Entry(program)
-            .Collection(p => p.ProgramExercises)
+            .Collection(p => p.WorkoutDays)
             .Query()
-            .Include(pe => pe.Exercise)
-            .Include(pe => pe.ProgramExerciseSets)
+            .Include(d => d.ProgramExercises)
+                .ThenInclude(pe => pe.Exercise)
+            .Include(d => d.ProgramExercises)
+                .ThenInclude(pe => pe.ProgramExerciseSets)
             .LoadAsync();
 
         return _mapper.Map<WorkoutProgramDto>(program);
@@ -115,29 +155,47 @@ public class WorkoutManager : IWorkoutManager
         if (activeSession != null)
             throw new InvalidOperationException("Cannot start workout: active session already exists");
 
-        // Get the program with exercises
+        // Get the program with days and exercises
         var program = await _context.WorkoutPrograms
-            .Include(p => p.ProgramExercises)
-                .ThenInclude(pe => pe.Exercise)
-            .Include(p => p.ProgramExercises)
-                .ThenInclude(pe => pe.ProgramExerciseSets)
+            .Include(p => p.WorkoutDays)
+                .ThenInclude(d => d.ProgramExercises)
+                    .ThenInclude(pe => pe.Exercise)
+            .Include(p => p.WorkoutDays)
+                .ThenInclude(d => d.ProgramExercises)
+                    .ThenInclude(pe => pe.ProgramExerciseSets)
             .FirstOrDefaultAsync(p => p.Id == request.ProgramId && p.UserId == userId);
 
         if (program == null)
             throw new ArgumentException("Program not found or not accessible");
+
+        WorkoutDay? workoutDay = null;
+        if (request.WorkoutDayId.HasValue)
+        {
+            workoutDay = program.WorkoutDays.FirstOrDefault(d => d.Id == request.WorkoutDayId.Value);
+            if (workoutDay == null)
+                throw new ArgumentException("WorkoutDay not found in program");
+        }
+        else
+        {
+            // Default: pick the first day (or implement logic to pick today's day)
+            workoutDay = program.WorkoutDays.OrderBy(d => d.SortOrder).FirstOrDefault();
+            if (workoutDay == null)
+                throw new ArgumentException("No workout days found in program");
+        }
 
         // Create workout session
         var session = new WorkoutSession
         {
             UserId = userId,
             ProgramId = request.ProgramId,
+            WorkoutDayId = workoutDay.Id,
             StartTime = DateTime.UtcNow
         };
 
         _context.WorkoutSessions.Add(session);
 
-        // Create workout exercises based on program
-        foreach (var programExercise in program.ProgramExercises.OrderBy(pe => pe.SortOrder))
+        // Create workout exercises based on program day
+        foreach (var programExercise in workoutDay.ProgramExercises.OrderBy(pe => pe.SortOrder))
         {
             var workoutExercise = new WorkoutExercise
             {

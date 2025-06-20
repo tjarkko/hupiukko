@@ -5,4 +5,5 @@ using System;
 public class StartWorkoutRequest
 {
     public Guid ProgramId { get; set; }
+    public Guid? WorkoutDayId { get; set; }
 } 
