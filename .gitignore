@@ -33,7 +33,7 @@ $RECYCLE.BIN/
 *.sln.docstates
 
 # ASP.NET
-appsettings.*.json
+appsettings.Production.json
 secrets.json
 
 # DbUp migration logs

@@ -1,5 +1,5 @@
 "use client";
-import { Box, Button, Grid, Typography, Paper } from "@mui/material";
+import { Box, Button, Grid, Typography, Paper, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider } from "@mui/material";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useGetWorkoutPrograms } from "../../../api/generated/workout/workout";
@@ -107,18 +107,75 @@ export default function TrainingPage() {
         ) : error ? (
           <Typography color="error">Failed to load program.</Typography>
         ) : selectedWorkoutDay && selectedExercises.length > 0 ? (
-          selectedExercises.map((exercise) => (
-            <Box key={exercise.id} mb={2}>
-              <Typography variant="subtitle1" mb={1}>
-                {exercise.exerciseId && exerciseMap[exercise.exerciseId]
-                  ? exerciseMap[exercise.exerciseId]
-                  : exercise.exerciseId}
-              </Typography>
-              <Button variant="contained" color="primary">
-                Start Exercise
-              </Button>
-            </Box>
-          ))
+          <>
+            {selectedExercises.map((exercise) => {
+              const ex = exercises.find((e) => e.id === exercise.exerciseId);
+              return (
+                <Paper key={exercise.id} sx={{ mb: 2, p: 2, textAlign: "left" }} elevation={2}>
+                  <Typography variant="h6" gutterBottom>
+                    {ex?.name || exercise.exerciseId}
+                  </Typography>
+                  {ex?.description && (
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      {ex.description}
+                    </Typography>
+                  )}
+                  <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 1 }}>
+                    {ex?.muscleGroups && <Chip label={ex.muscleGroups} size="small" />}
+                    {ex?.equipment && <Chip label={ex.equipment} size="small" />}
+                    {ex?.difficultyLevel && <Chip label={ex.difficultyLevel} size="small" />}
+                  </Box>
+                  <Divider sx={{ my: 1 }} />
+                  {exercise.programExerciseSets && exercise.programExerciseSets.length > 0 ? (
+                    <TableContainer>
+                      <Table size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Set</TableCell>
+                            <TableCell>Reps</TableCell>
+                            <TableCell>Weight</TableCell>
+                            <TableCell>Rest (s)</TableCell>
+                            <TableCell>Notes</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {exercise.programExerciseSets.map((set) => (
+                            <TableRow key={set.id || set.setNumber}>
+                              <TableCell>{set.setNumber}</TableCell>
+                              <TableCell>{set.targetRepsMin}{set.targetRepsMax ? `-${set.targetRepsMax}` : ""}</TableCell>
+                              <TableCell>{set.targetWeight ?? "-"}</TableCell>
+                              <TableCell>{set.restTimeSeconds ?? "-"}</TableCell>
+                              <TableCell>{set.notes ?? ""}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  ) : (
+                    <Box sx={{ mb: 1 }}>
+                      <Typography variant="body2">
+                        Sets: <b>{exercise.targetSets ?? "-"}</b>, Reps: <b>{exercise.defaultRepsMin}{exercise.defaultRepsMax ? `-${exercise.defaultRepsMax}` : ""}</b>
+                        {exercise.defaultWeight !== undefined && exercise.defaultWeight !== null && (
+                          <> , Weight: <b>{exercise.defaultWeight}</b></>
+                        )}
+                        {exercise.defaultRestTimeSeconds !== undefined && exercise.defaultRestTimeSeconds !== null && (
+                          <> , Rest: <b>{exercise.defaultRestTimeSeconds}s</b></>
+                        )}
+                      </Typography>
+                    </Box>
+                  )}
+                  {exercise.notes && (
+                    <Typography variant="body2" color="text.secondary" mt={1}>
+                      <i>{exercise.notes}</i>
+                    </Typography>
+                  )}
+                </Paper>
+              );
+            })}
+            <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+              Start Training Session
+            </Button>
+          </>
         ) : (
           <Typography color="text.secondary">No exercise planned for this day.</Typography>
         )}
