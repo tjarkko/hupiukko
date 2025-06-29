@@ -1,0 +1,12 @@
+using '../main.bicep'
+
+param resourceGroupName = 'hupiukko-dev'
+param location = 'swedencentral'
+param environment = 'dev'
+param appServicePlanName = 'hupiukko-appserviceplan-dev'
+param appServiceName = 'hupiukko-frontend-appservice-dev'
+param keyVaultName = 'hupiukko-keyvault-dev'
+param NEXT_PUBLIC_API_URL = 'https://your-backend-api-url'
+param NEXTAUTH_URL = 'https://your-frontend-url'
+param AZURE_AD_CLIENT_ID = '08716fe7-db8b-45ad-b905-7ce1b2fe0c35'
+param AZURE_AD_TENANT_ID = '287fc32d-9911-40b2-a2c2-a6419fd5e4c9'
