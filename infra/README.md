@@ -7,47 +7,61 @@ This folder contains the Bicep templates and configuration for deploying the Hup
 ```
 infra/
   main.bicep                # Entry point for deployment
-  parameters/               # Environment-specific parameter files
-    dev.parameters.json
-    prod.parameters.json
+  parameters/               # Environment-specific parameter files (.bicepparam)
+    dev.bicepparam
   modules/                  # Bicep modules for each resource type
     appservice/
       appservice.bicep
     keyvault/
       keyvault.bicep
+    resourcegroup/
+      resourcegroup.bicep
   README.md                 # This file
-  pipeline/                 # CI/CD pipeline definitions
-    azure-pipelines.yml
 ```
+
+At the repo root:
+- `environments.yml` — Central environment configuration for all workflows and deployments
+- `.github/workflows/deploy-infra.yml` — GitHub Actions workflow for infra deployment
+- `docs/infra-deployment-overview.md` — Detailed documentation of the deployment approach
 
 ## Deployment Instructions
 
-1. **Install Azure CLI and Bicep**
-2. **Login to Azure:**
-   ```sh
-   az login
-   ```
-3. **Deploy the infrastructure:**
-   ```sh
-   az deployment group create \
-     --resource-group <your-resource-group> \
-     --template-file main.bicep \
-     --parameters @parameters/dev.parameters.json
-   ```
+### 1. Prerequisites
+- Install Azure CLI and Bicep
+- Login to Azure:
+  ```sh
+  az login
+  ```
 
-## Adding New Resources
-- Add a new module under `modules/` (e.g., `modules/storage/storage.bicep`).
-- Reference the new module in `main.bicep`.
-- Add any required parameters to the relevant parameter files.
+### 2. Deploy the Resource Group (subscription scope)
+```sh
+az deployment sub create \
+  --location <location> \
+  --template-file modules/resourcegroup/resourcegroup.bicep \
+  --parameters resourceGroupName=<your-resource-group> location=<location>
+```
 
-## Parameters
-- Store environment-specific values in `parameters/`.
-- Do **not** store secrets in parameter files; use Key Vault for secrets.
+### 3. Deploy the Infrastructure (resource group scope)
+```sh
+az deployment group create \
+  --resource-group <your-resource-group> \
+  --template-file main.bicep \
+  --parameters @parameters/dev.bicepparam
+```
+
+### 4. (Recommended) Use GitHub Actions
+- See `.github/workflows/deploy-infra.yml` for automated, environment-aware deployment using `environments.yml`.
+
+## Configuration
+- **environments.yml** at the repo root holds all environment-specific values (resource group, location, app service name, etc.) for dev, prod, etc.
+- **.bicepparam files** in `infra/parameters/` provide parameters for Bicep templates per environment.
+- **No secrets** should be stored in parameter files; use Key Vault for secrets.
 
 ## Current Modules
-- **App Service**: Hosts the Next.js frontend.
-- **Key Vault**: Stores secrets and configuration for the app.
+- **App Service**: Hosts the Next.js frontend (AVM module)
+- **Key Vault**: Stores secrets and configuration for the app (AVM module)
+- **Resource Group**: Creates the resource group (AVM module)
 
 ---
 
-For more details, see the comments in each Bicep file. 
+For a detailed overview of the deployment process, configuration, and best practices, see [`../docs/infra-deployment-overview.md`](../docs/infra-deployment-overview.md). 
