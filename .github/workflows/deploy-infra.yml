@@ -39,16 +39,15 @@ jobs:
         run: cat infra/parameters/${{ github.event.inputs.environment }}.parameters.json
 
       - name: Preview Bicep deployment (what-if)
-        if: ${{ github.event.inputs.preview == true }}
+        if: ${{ github.event.inputs.preview == 'true' }}
         run: |
           az deployment group what-if \
             --resource-group ${{ env.resource_group }} \
             --template-file infra/main.bicep \
             --parameters @infra/parameters/${{ github.event.inputs.environment }}.parameters.json
-            --verbose
 
       - name: Deploy Bicep file
-        if: ${{ github.event.inputs.preview != true }}
+        if: ${{ github.event.inputs.preview != 'true' }}
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
