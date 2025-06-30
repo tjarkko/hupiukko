@@ -16,6 +16,16 @@ on:
         required: false
         default: false
         type: boolean
+      services:
+        description: 'Services to deploy'
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - keyvault
+          - appservice
+          - none
 
 jobs:
   deploy:
@@ -35,6 +45,22 @@ jobs:
         env:
           ENVIRONMENT: ${{ github.event.inputs.environment }}
 
+      - name: Set deploy booleans based on service selection
+        run: |
+          if [[ "${{ github.event.inputs.services }}" == "all" ]]; then
+            echo "DEPLOY_KEYVAULT=true" >> $GITHUB_ENV
+            echo "DEPLOY_APPSERVICE=true" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.services }}" == "keyvault" ]]; then
+            echo "DEPLOY_KEYVAULT=true" >> $GITHUB_ENV
+            echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.services }}" == "appservice" ]]; then
+            echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
+            echo "DEPLOY_APPSERVICE=true" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
+            echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
+          fi
+
       - name: Print deployment parameters
         run: cat infra/parameters/${{ github.event.inputs.environment }}.parameters.json
 
@@ -44,7 +70,9 @@ jobs:
           az deployment group what-if \
             --resource-group ${{ env.resource_group }} \
             --template-file infra/main.bicep \
-            --parameters @infra/parameters/${{ github.event.inputs.environment }}.parameters.json
+            --parameters @infra/parameters/${{ github.event.inputs.environment }}.parameters.json \
+            deployKeyVault=${{ env.DEPLOY_KEYVAULT }} \
+            deployAppService=${{ env.DEPLOY_APPSERVICE }}
 
       - name: Deploy Bicep file
         if: ${{ github.event.inputs.preview != 'true' }}
@@ -53,5 +81,8 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.resource_group }}
           template: infra/main.bicep
-          parameters: '@infra/parameters/${{ github.event.inputs.environment }}.parameters.json'
+          parameters: >
+            @infra/parameters/${{ github.event.inputs.environment }}.parameters.json
+            deployKeyVault=${{ env.DEPLOY_KEYVAULT }}
+            deployAppService=${{ env.DEPLOY_APPSERVICE }}
           failOnStdErr: false

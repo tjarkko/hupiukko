@@ -1,4 +1,6 @@
 // main.bicep - Entry point for Hupiukko infra
+// 'deployKeyVault' and 'deployAppService' are controlled by the 'services' input in the pipeline.
+// 'all' means both are true; 'keyvault' or 'appservice' means only that service is deployed.
 
 param environment string
 param appServiceName string
