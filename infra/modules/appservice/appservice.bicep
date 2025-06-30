@@ -20,6 +20,7 @@ module hupiukkoAppServicePlan 'br/public:avm/res/web/serverfarm:0.4.1' = {
     skuName: 'F1'
     kind: 'linux'
     reserved: true
+    targetWorkerCount: 1
     // Add other optional params as needed
   }
 }
