@@ -35,4 +35,13 @@ module appService 'modules/appservice/appservice.bicep' = if (deployAppService) 
     AZURE_AD_CLIENT_ID: AZURE_AD_CLIENT_ID
     AZURE_AD_TENANT_ID: AZURE_AD_TENANT_ID
   }
-} 
+}
+
+output environment string = environment
+output appServiceName string = appServiceName
+output keyVaultName string = keyVaultName
+output NEXT_PUBLIC_API_URL string = NEXT_PUBLIC_API_URL
+output NEXTAUTH_URL string = NEXTAUTH_URL
+output AZURE_AD_CLIENT_ID string = AZURE_AD_CLIENT_ID
+output AZURE_AD_TENANT_ID string = AZURE_AD_TENANT_ID
+output appServicePlanName string = appServicePlanName 
