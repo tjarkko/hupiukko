@@ -34,13 +34,6 @@ jobs:
         env:
           ENVIRONMENT: ${{ matrix.environment }}
 
-      - name: Create Resource Group
-        run: |
-          az deployment sub create \
-            --location ${{ env.location }} \
-            --template-file infra/modules/resourcegroup/resourcegroup.bicep \
-            --parameters resourceGroupName=${{ env.resource_group }} location=${{ env.location }}
-
       - name: Deploy Infrastructure
         run: |
           az deployment group create \
