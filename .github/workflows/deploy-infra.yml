@@ -30,9 +30,13 @@ jobs:
         env:
           ENVIRONMENT: ${{ github.event.inputs.environment }}
 
+      - name: Prepare parameters file for deployment
+        run: |
+          grep -v '^using ' infra/parameters/${{ github.event.inputs.environment }}.bicepparam > params.cicd.bicepparam
+
       - name: Deploy Infrastructure
         run: |
           az deployment group create \
             --resource-group ${{ env.resource_group }} \
             --template-file infra/main.bicep \
-            --parameters @${{ env.param_file }} 
+            --parameters @params.cicd.bicepparam 
