@@ -2,13 +2,19 @@ name: Deploy Azure Infrastructure
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [dev, prod]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,14 +31,14 @@ jobs:
 
       - name: Export all environment variables for selected environment
         run: |
-          for row in $(yq ".${{ matrix.environment }} | to_entries | .[] | @base64" environments.yml); do
+          for row in $(yq ".${{ github.event.inputs.environment }} | to_entries | .[] | @base64" environments.yml); do
             _jq() {
               echo ${row} | base64 --decode | jq -r '.key + "=" + .value'
             }
             echo $(_jq) >> $GITHUB_ENV
           done
         env:
-          ENVIRONMENT: ${{ matrix.environment }}
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
 
       - name: Deploy Infrastructure
         run: |
