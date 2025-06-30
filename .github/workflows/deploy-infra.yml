@@ -35,4 +35,5 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.resource_group }} \
             --template-file infra/main.bicep \
-            --parameters @infra/parameters/${{ github.event.inputs.environment }}.parameters.json 
+            --parameters @infra/parameters/${{ github.event.inputs.environment }}.parameters.json
+            --verbose
