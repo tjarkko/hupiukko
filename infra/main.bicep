@@ -1,10 +1,8 @@
 // main.bicep - Entry point for Hupiukko infra
 
-param location string = resourceGroup().location
 param environment string
 param appServiceName string
 param keyVaultName string
-param resourceGroupName string
 param NEXT_PUBLIC_API_URL string
 param NEXTAUTH_URL string
 param AZURE_AD_CLIENT_ID string
@@ -19,7 +17,7 @@ param deployAppService bool = true
 module keyVault 'modules/keyvault/keyvault.bicep' = if (deployKeyVault) {
   name: 'keyVault'
   params: {
-    location: location
+    location: resourceGroup().location
     keyVaultName: keyVaultName
   }
 }
@@ -27,7 +25,7 @@ module keyVault 'modules/keyvault/keyvault.bicep' = if (deployKeyVault) {
 module appService 'modules/appservice/appservice.bicep' = if (deployAppService) {
   name: 'appService'
   params: {
-    location: location
+    location: resourceGroup().location
     appServiceName: appServiceName
     appServicePlanName: appServicePlanName
     keyVaultId: keyVault.outputs.keyVaultId

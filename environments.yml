@@ -1,13 +1,13 @@
 dev:
-  resource_group: hupiukko-dev
+  resource_group: hupiukko-dev-rg
   location: swedencentral
   app_service_name: hupiukko-frontend-appservice-dev
   app_service_plan: hupiukko-appserviceplan-dev
   key_vault: hupiukko-keyvault-dev
   param_file: infra/parameters/dev.bicepparam
 prod:
-  resource_group: hupiukko-prod
-  location: westeurope
+  resource_group: hupiukko-prod-rg
+  location: swedencentral
   app_service_name: hupiukko-frontend-appservice-prod
   app_service_plan: hupiukko-appserviceplan-prod
   key_vault: hupiukko-keyvault-prod

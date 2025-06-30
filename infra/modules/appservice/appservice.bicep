@@ -16,7 +16,7 @@ module hupiukkoAppServicePlan 'br/public:avm/res/web/serverfarm:0.4.1' = {
   name: 'hupiukkoAppServicePlan'
   params: {
     name: appServicePlanName
-    location: resourceGroup().location
+    location: location
     skuName: 'F1'
     kind: 'linux'
     reserved: true

@@ -1,7 +1,5 @@
 using '../main.bicep'
 
-param resourceGroupName = 'hupiukko-dev'
-param location = 'swedencentral'
 param environment = 'dev'
 param appServicePlanName = 'hupiukko-appserviceplan-dev'
 param appServiceName = 'hupiukko-frontend-appservice-dev'
