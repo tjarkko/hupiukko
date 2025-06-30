@@ -7,6 +7,7 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.13.0' = {
   params: {
     name: keyVaultName
     location: location
+    sku: 'standard'
     // Add more AVM params as needed
   }
 }

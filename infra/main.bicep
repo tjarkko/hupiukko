@@ -14,6 +14,14 @@ param deployKeyVault bool = true
 @description('Set to true to deploy the App Service module')
 param deployAppService bool = true
 
+output environment string = environment
+output appServiceName string = appServiceName
+output keyVaultName string = keyVaultName
+output NEXT_PUBLIC_API_URL string = NEXT_PUBLIC_API_URL
+output NEXTAUTH_URL string = NEXTAUTH_URL
+output AZURE_AD_CLIENT_ID string = AZURE_AD_CLIENT_ID
+output AZURE_AD_TENANT_ID string = AZURE_AD_TENANT_ID
+output appServicePlanName string = appServicePlanName 
 module keyVault 'modules/keyvault/keyvault.bicep' = if (deployKeyVault) {
   name: 'keyVault'
   params: {
@@ -37,11 +45,4 @@ module appService 'modules/appservice/appservice.bicep' = if (deployAppService) 
   }
 }
 
-output environment string = environment
-output appServiceName string = appServiceName
-output keyVaultName string = keyVaultName
-output NEXT_PUBLIC_API_URL string = NEXT_PUBLIC_API_URL
-output NEXTAUTH_URL string = NEXTAUTH_URL
-output AZURE_AD_CLIENT_ID string = AZURE_AD_CLIENT_ID
-output AZURE_AD_TENANT_ID string = AZURE_AD_TENANT_ID
-output appServicePlanName string = appServicePlanName 
+
