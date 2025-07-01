@@ -10,6 +10,43 @@
     "NEXT_PUBLIC_API_URL": { "value": "https://your-backend-api-url" },
     "NEXTAUTH_URL": { "value": "https://your-frontend-url" },
     "AZURE_AD_CLIENT_ID": { "value": "08716fe7-db8b-45ad-b905-7ce1b2fe0c35" },
-    "AZURE_AD_TENANT_ID": { "value": "287fc32d-9911-40b2-a2c2-a6419fd5e4c9" }
+    "AZURE_AD_TENANT_ID": { "value": "287fc32d-9911-40b2-a2c2-a6419fd5e4c9" },
+    "frontendIdentityResourceIds": {
+      "value": [
+        "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hupiukko-frontend-identity"
+      ]
+    },
+    "managedIdentities": {
+      "value": [
+        {
+          "name": "hupiukko-frontend-identity",
+          "rbacAssignments": [
+            {
+              "roleDefinitionIdOrName": "Key Vault Secrets User",
+              "scope": "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.KeyVault/vaults/hupiukko-kv-dev",
+              "description": "Frontend can read secrets"
+            },
+            {
+              "roleDefinitionIdOrName": "Reader",
+              "scope": "/subscriptions/<sub>/resourceGroups/<rg>",
+              "description": "Frontend can read the resource group"
+            }
+          ]
+        },
+        {
+          "name": "hupiukko-backend-identity",
+          "rbacAssignments": [
+            {
+              "roleDefinitionIdOrName": "Key Vault Secrets User",
+              "scope": "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.KeyVault/vaults/hupiukko-kv-dev"
+            },
+            {
+              "roleDefinitionIdOrName": "SQL DB Contributor",
+              "scope": "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Sql/servers/your-sql-server"
+            }
+          ]
+        }
+      ]
+    }
   }
 } 

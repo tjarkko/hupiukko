@@ -7,6 +7,8 @@ param NEXTAUTH_URL string
 param AZURE_AD_CLIENT_ID string
 param AZURE_AD_TENANT_ID string
 param appServicePlanName string
+@description('Array of user-assigned managed identity resource IDs for the frontend app. Leave empty for none.')
+param frontendIdentityResourceIds array = []
 
 var azureAdClientSecretUri = '${keyVaultUri}secrets/AZURE-AD-CLIENT-SECRET'
 var nextAuthSecretUri = '${keyVaultUri}secrets/NEXTAUTH-SECRET'
@@ -37,6 +39,9 @@ module hupiukkoFrontendAppService 'br/public:avm/res/web/site:0.16.0' = {
       linuxFxVersion: 'NODE|18-lts'
     }
     httpsOnly: true
+    managedIdentities: {
+      userAssignedResourceIds: frontendIdentityResourceIds
+    }
     configs: [
       {
         name: 'appsettings'

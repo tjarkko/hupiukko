@@ -25,6 +25,7 @@ on:
           - all
           - keyvault
           - appservice
+          - mi
           - none
 
 jobs:
@@ -50,15 +51,23 @@ jobs:
           if [[ "${{ github.event.inputs.services }}" == "all" ]]; then
             echo "DEPLOY_KEYVAULT=true" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=true" >> $GITHUB_ENV
+            echo "DEPLOY_MI_RBAC=true" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.services }}" == "keyvault" ]]; then
             echo "DEPLOY_KEYVAULT=true" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
+            echo "DEPLOY_MI_RBAC=false" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.services }}" == "appservice" ]]; then
             echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=true" >> $GITHUB_ENV
+            echo "DEPLOY_MI_RBAC=false" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.services }}" == "mi" ]]; then
+            echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
+            echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
+            echo "DEPLOY_MI_RBAC=true" >> $GITHUB_ENV
           else
             echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
+            echo "DEPLOY_MI_RBAC=false" >> $GITHUB_ENV
           fi
 
       - name: Print deployment parameters
@@ -72,7 +81,8 @@ jobs:
             --template-file infra/main.bicep \
             --parameters @infra/parameters/${{ github.event.inputs.environment }}.parameters.json \
             deployKeyVault=${{ env.DEPLOY_KEYVAULT }} \
-            deployAppService=${{ env.DEPLOY_APPSERVICE }}
+            deployAppService=${{ env.DEPLOY_APPSERVICE }} \
+            deployManagedIdentitiesAndRbac=${{ env.DEPLOY_MI_RBAC }}
 
       - name: Deploy Bicep file
         if: ${{ github.event.inputs.preview != 'true' }}
@@ -85,4 +95,5 @@ jobs:
             @infra/parameters/${{ github.event.inputs.environment }}.parameters.json
             deployKeyVault=${{ env.DEPLOY_KEYVAULT }}
             deployAppService=${{ env.DEPLOY_APPSERVICE }}
+            deployManagedIdentitiesAndRbac=${{ env.DEPLOY_MI_RBAC }}
           failOnStdErr: false

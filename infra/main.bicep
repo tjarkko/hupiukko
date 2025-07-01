@@ -9,13 +9,18 @@ param NEXT_PUBLIC_API_URL string
 param NEXTAUTH_URL string
 param AZURE_AD_CLIENT_ID string
 param AZURE_AD_TENANT_ID string
+param frontendIdentityResourceIds array = []
 param appServicePlanName string
 param keyVaultUri string
+param keyVaultResourceId string
+param managedIdentities array
 
 @description('Set to true to deploy the Key Vault module')
 param deployKeyVault bool = true
 @description('Set to true to deploy the App Service module')
 param deployAppService bool = true
+@description('Set to true to deploy both managed identities and RBAC assignments')
+param deployManagedIdentitiesAndRbac bool = true
 
 output environment string = environment
 output appServiceName string = appServiceName
@@ -46,7 +51,26 @@ module appService 'modules/appservice/appservice.bicep' = if (deployAppService) 
     NEXTAUTH_URL: NEXTAUTH_URL
     AZURE_AD_CLIENT_ID: AZURE_AD_CLIENT_ID
     AZURE_AD_TENANT_ID: AZURE_AD_TENANT_ID
+    frontendIdentityResourceIds: frontendIdentityResourceIds
   }
 }
+
+// Deploy managed identities and RBAC only if enabled
+module managedIdentitiesModule 'modules/managed-identities.bicep' = if (deployManagedIdentitiesAndRbac) {
+  name: 'managedIdentitiesModule'
+  params: {
+    managedIdentities: managedIdentities
+    location: resourceGroup().location
+  }
+}
+
+module rbacModule 'modules/rbac.bicep' = if (deployManagedIdentitiesAndRbac) {
+  name: 'rbacModule'
+  params: {
+    managedIdentities: managedIdentitiesModule.outputs.identitiesInfo
+  }
+}
+
+
 
 
