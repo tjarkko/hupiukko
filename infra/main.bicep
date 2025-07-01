@@ -39,7 +39,7 @@ module appService 'modules/appservice/appservice.bicep' = if (deployAppService) 
     location: resourceGroup().location
     appServiceName: appServiceName
     appServicePlanName: appServicePlanName
-    keyVaultId: keyVault.outputs.keyVaultId
+    keyVaultUri: keyVault.outputs.keyVaultUri
     environment: environment
     NEXT_PUBLIC_API_URL: NEXT_PUBLIC_API_URL
     NEXTAUTH_URL: NEXTAUTH_URL

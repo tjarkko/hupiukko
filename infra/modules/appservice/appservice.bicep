@@ -1,6 +1,6 @@
 param location string
 param appServiceName string
-param keyVaultId string
+param keyVaultUri string
 param environment string
 param NEXT_PUBLIC_API_URL string
 param NEXTAUTH_URL string
@@ -8,8 +8,8 @@ param AZURE_AD_CLIENT_ID string
 param AZURE_AD_TENANT_ID string
 param appServicePlanName string
 
-var azureAdClientSecretUri = 'https://${split(keyVaultId, '/')[8]}.${az.environment().suffixes.keyvaultDns}/secrets/AZURE-AD-CLIENT-SECRET'
-var nextAuthSecretUri = 'https://${split(keyVaultId, '/')[8]}.${az.environment().suffixes.keyvaultDns}/secrets/NEXTAUTH-SECRET'
+var azureAdClientSecretUri = '${keyVaultUri}secrets/AZURE-AD-CLIENT-SECRET'
+var nextAuthSecretUri = '${keyVaultUri}secrets/NEXTAUTH-SECRET'
 
 // Use AVM App Service Plan (Linux, Free tier)
 module hupiukkoAppServicePlan 'br/public:avm/res/web/serverfarm:0.4.1' = {

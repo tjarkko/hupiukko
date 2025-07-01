@@ -18,4 +18,5 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.13.0' = {
   }
 }
 
-output keyVaultId string = keyVault.outputs.resourceId 
+output keyVaultId string = keyVault.outputs.resourceId
+output keyVaultUri string = keyVault.outputs.uri
