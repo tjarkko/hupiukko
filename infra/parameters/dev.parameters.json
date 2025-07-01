@@ -22,12 +22,9 @@
           "name": "hupiukko-frontend-identity",
           "rbacAssignments": [
             {
-              "roleDefinitionIdOrName": "Key Vault Secrets User",
+              "roleDefinitionIdOrName": "b86a8fe4-44ce-4948-aee5-eccb2c155cd7",
+              "roleName": "Key Vault Secrets User",
               "description": "Frontend can read secrets"
-            },
-            {
-              "roleDefinitionIdOrName": "Reader",
-              "description": "Frontend can read the resource group"
             }
           ]
         },
@@ -35,11 +32,13 @@
           "name": "hupiukko-backend-identity",
           "rbacAssignments": [
             {
-              "roleDefinitionIdOrName": "Key Vault Secrets User",
+              "roleDefinitionIdOrName": "b86a8fe4-44ce-4948-aee5-eccb2c155cd7",
+              "roleName": "Key Vault Secrets User",
               "description": "Backend can read secrets"
             },
             {
-              "roleDefinitionIdOrName": "SQL DB Contributor",
+              "roleDefinitionIdOrName": "9b7fa17d-e63e-47b0-bb0a-15c516ac86ec",
+              "roleName": "SQL DB Contributor",
               "description": "Backend can manage SQL server"
             }
           ]
