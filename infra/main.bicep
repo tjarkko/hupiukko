@@ -29,6 +29,7 @@ module keyVault 'modules/keyvault/keyvault.bicep' = if (deployKeyVault) {
   params: {
     location: resourceGroup().location
     keyVaultName: keyVaultName
+    enablePurgeProtection: false
   }
 }
 
