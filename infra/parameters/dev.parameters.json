@@ -6,6 +6,7 @@
     "appServicePlanName": { "value": "hupiukko-appserviceplan-dev" },
     "appServiceName": { "value": "hupiukko-frontend-appservice-dev" },
     "keyVaultName": { "value": "hupiukko-kv-dev" },
+    "keyVaultUri": { "value": "https://hupiukko-kv-dev.vault.azure.net/" },
     "NEXT_PUBLIC_API_URL": { "value": "https://your-backend-api-url" },
     "NEXTAUTH_URL": { "value": "https://your-frontend-url" },
     "AZURE_AD_CLIENT_ID": { "value": "08716fe7-db8b-45ad-b905-7ce1b2fe0c35" },

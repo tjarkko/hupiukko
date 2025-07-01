@@ -10,6 +10,7 @@ param NEXTAUTH_URL string
 param AZURE_AD_CLIENT_ID string
 param AZURE_AD_TENANT_ID string
 param appServicePlanName string
+param keyVaultUri string
 
 @description('Set to true to deploy the Key Vault module')
 param deployKeyVault bool = true
@@ -39,7 +40,7 @@ module appService 'modules/appservice/appservice.bicep' = if (deployAppService) 
     location: resourceGroup().location
     appServiceName: appServiceName
     appServicePlanName: appServicePlanName
-    keyVaultUri: keyVault.outputs.keyVaultUri
+    keyVaultUri: keyVaultUri
     environment: environment
     NEXT_PUBLIC_API_URL: NEXT_PUBLIC_API_URL
     NEXTAUTH_URL: NEXTAUTH_URL
