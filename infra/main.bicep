@@ -12,7 +12,6 @@ param AZURE_AD_TENANT_ID string
 param frontendIdentityResourceIds array = []
 param appServicePlanName string
 param keyVaultUri string
-param keyVaultResourceId string
 param managedIdentities array
 
 @description('Set to true to deploy the Key Vault module')
