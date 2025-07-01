@@ -8,7 +8,6 @@ var rbacAssignments = flatten(
         identityName: identity.name
         principalId: identity.principalId
         roleDefinitionIdOrName: assignment.roleDefinitionIdOrName
-        scope: assignment.scope
         description: assignment.description
       }
     )
@@ -16,12 +15,13 @@ var rbacAssignments = flatten(
 ) 
 
 resource rbacAssignmentsRes 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for assignment in rbacAssignments: {
-  name: guid(assignment.scope, assignment.identityName, assignment.roleDefinitionIdOrName)
+  name: guid(assignment.identityName, assignment.roleDefinitionIdOrName)
   scope: resourceGroup()
   properties: {
     principalId: assignment.principalId
     roleDefinitionId: assignment.roleDefinitionIdOrName
     principalType: 'ServicePrincipal'
+    description: assignment.description
   }
 }]
 

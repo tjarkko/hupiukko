@@ -23,12 +23,10 @@
           "rbacAssignments": [
             {
               "roleDefinitionIdOrName": "Key Vault Secrets User",
-              "scope": "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.KeyVault/vaults/hupiukko-kv-dev",
               "description": "Frontend can read secrets"
             },
             {
               "roleDefinitionIdOrName": "Reader",
-              "scope": "/subscriptions/<sub>/resourceGroups/<rg>",
               "description": "Frontend can read the resource group"
             }
           ]
@@ -38,11 +36,11 @@
           "rbacAssignments": [
             {
               "roleDefinitionIdOrName": "Key Vault Secrets User",
-              "scope": "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.KeyVault/vaults/hupiukko-kv-dev"
+              "description": "Backend can read secrets"
             },
             {
               "roleDefinitionIdOrName": "SQL DB Contributor",
-              "scope": "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Sql/servers/your-sql-server"
+              "description": "Backend can manage SQL server"
             }
           ]
         }
