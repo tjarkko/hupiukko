@@ -1,0 +1,52 @@
+name: Deploy Frontend to Azure App Service
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Next.js app
+        run: pnpm run build
+
+      # Optionally, run tests or lint here
+      # - name: Run tests
+      #   run: pnpm test
+
+      # Azure login using service principal
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: hupiukko-frontend-appservice-dev
+          package: .
+
+# Notes:
+# - Set AZURE_WEBAPP_NAME and AZURE_WEBAPP_PUBLISH_PROFILE as repository secrets.
+# - This workflow can be extended to deploy backend or run additional steps as needed. 
