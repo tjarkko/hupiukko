@@ -13,7 +13,7 @@
     "AZURE_AD_TENANT_ID": { "value": "287fc32d-9911-40b2-a2c2-a6419fd5e4c9" },
     "frontendIdentityResourceIds": {
       "value": [
-        "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hupiukko-frontend-identity"
+        "/subscriptions/6d0f08b9-372a-47a8-a09b-59a90271cbe0/resourcegroups/hupiukko-dev-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hupiukko-frontend-identity"
       ]
     },
     "managedIdentities": {
@@ -22,7 +22,7 @@
           "name": "hupiukko-frontend-identity",
           "rbacAssignments": [
             {
-              "roleDefinitionIdOrName": "b86a8fe4-44ce-4948-aee5-eccb2c155cd7",
+              "roleDefinitionIdOrName": "4633458b-17de-408a-b874-0445c86b69e6",
               "roleName": "Key Vault Secrets User",
               "description": "Frontend can read secrets"
             }
@@ -32,7 +32,7 @@
           "name": "hupiukko-backend-identity",
           "rbacAssignments": [
             {
-              "roleDefinitionIdOrName": "b86a8fe4-44ce-4948-aee5-eccb2c155cd7",
+              "roleDefinitionIdOrName": "4633458b-17de-408a-b874-0445c86b69e6",
               "roleName": "Key Vault Secrets User",
               "description": "Backend can read secrets"
             },
