@@ -47,7 +47,6 @@ jobs:
           mkdir -p ../deploy
           cp -r .next/standalone/* ../deploy/
           cp -r .next/static ../deploy/.next/
-          cp -r public ../deploy/
         working-directory: frontend
 
       - name: Zip deployment package

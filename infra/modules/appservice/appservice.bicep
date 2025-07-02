@@ -10,6 +10,9 @@ param appServicePlanName string
 @description('Array of user-assigned managed identity resource IDs for the frontend app. Leave empty for none.')
 param frontendIdentityResourceIds array = []
 
+@description('Startup command for the App Service (e.g., node server.js for Next.js standalone output)')
+param startupCommand string = 'node server.js'
+
 var azureAdClientSecretUri = '${keyVaultUri}secrets/AZURE-AD-CLIENT-SECRET'
 var nextAuthSecretUri = '${keyVaultUri}secrets/NEXTAUTH-SECRET'
 
@@ -37,6 +40,7 @@ module hupiukkoFrontendAppService 'br/public:avm/res/web/site:0.16.0' = {
     kind: 'app,linux'
     siteConfig: {
       linuxFxVersion: 'NODE|18-lts'
+      appCommandLine: startupCommand
     }
     httpsOnly: true
     managedIdentities: {
@@ -58,4 +62,4 @@ module hupiukkoFrontendAppService 'br/public:avm/res/web/site:0.16.0' = {
     ]
     // Add other optional params as needed
   }
-} 
+}
