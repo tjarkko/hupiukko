@@ -51,7 +51,7 @@ jobs:
         working-directory: frontend
 
       - name: Zip deployment package
-        run: cd deploy && zip -r ../deploy.zip .
+        run: cd deploy && zip -r -y ../deploy.zip . --symlinks
         working-directory: frontend
 
       - name: Upload artifact for deployment job
@@ -84,7 +84,6 @@ jobs:
 
       - name: Delete zip file
         run: rm deploy.zip
-        working-directory: frontend
 # Notes:
 # - Set AZURE_WEBAPP_NAME and AZURE_WEBAPP_PUBLISH_PROFILE as repository secrets.
 # - This workflow can be extended to deploy backend or run additional steps as needed.
