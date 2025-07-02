@@ -44,13 +44,14 @@ jobs:
       # Prepare minimal deployment package (standalone output)
       - name: Prepare deployment package
         run: |
-          mkdir -p ../deploy
-          cp -r .next/standalone/* ../deploy/
-          cp -r .next/static ../deploy/.next/
+          mkdir -p deploy
+          cp -r .next/standalone/* deploy/
+          cp -r .next/static deploy/.next/
+          if [ -d public ]; then cp -r public deploy/; fi
         working-directory: frontend
 
       - name: Zip deployment package
-        run: cd ../deploy && zip -r ../deploy.zip .
+        run: cd deploy && zip -r ../deploy.zip .
         working-directory: frontend
 
       - name: Upload artifact for deployment job
