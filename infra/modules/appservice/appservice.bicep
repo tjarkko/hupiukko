@@ -39,13 +39,14 @@ module hupiukkoFrontendAppService 'br/public:avm/res/web/site:0.16.0' = {
     serverFarmResourceId: hupiukkoAppServicePlan.outputs.resourceId
     kind: 'app,linux'
     siteConfig: {
-      linuxFxVersion: 'NODE|18-lts'
+      linuxFxVersion: 'NODE|22-lts'
       appCommandLine: startupCommand
     }
     httpsOnly: true
     managedIdentities: {
       userAssignedResourceIds: frontendIdentityResourceIds
     }
+    keyVaultAccessIdentityResourceId: frontendIdentityResourceIds[0]
     configs: [
       {
         name: 'appsettings'
