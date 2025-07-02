@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from '../../auth/authOptions';
 
 const BACKEND_API_URL = process.env.BACKEND_API_URL || 'https://localhost:7151';
 
-export async function GET(req: NextRequest, { params }: { params: { path: string[] } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
+  const { path } = await params;
   const session = await getServerSession(authOptions);
   const accessToken = session?.accessToken;
 
   // Reconstruct the backend URL
-  const backendPath = params.path.join('/');
+  const backendPath = path.join('/');
   const url = `${BACKEND_API_URL}/${backendPath}${req.nextUrl.search}`;
 
   const res = await fetch(url, {

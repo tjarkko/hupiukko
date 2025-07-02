@@ -8,7 +8,7 @@
     "keyVaultName": { "value": "hupiukko-kv-dev" },
     "keyVaultUri": { "value": "https://hupiukko-kv-dev.vault.azure.net/" },
     "NEXT_PUBLIC_API_URL": { "value": "https://your-backend-api-url" },
-    "NEXTAUTH_URL": { "value": "https://your-frontend-url" },
+    "NEXTAUTH_URL": { "value": "https://hupiukko-frontend-appservice-dev.azurewebsites.net/" },
     "AZURE_AD_CLIENT_ID": { "value": "08716fe7-db8b-45ad-b905-7ce1b2fe0c35" },
     "AZURE_AD_TENANT_ID": { "value": "287fc32d-9911-40b2-a2c2-a6419fd5e4c9" },
     "frontendIdentityResourceIds": {
