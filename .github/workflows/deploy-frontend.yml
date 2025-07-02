@@ -31,7 +31,7 @@ jobs:
           cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --prod --shamefully-hoist
         working-directory: frontend
 
       - name: Build Next.js app
@@ -51,7 +51,7 @@ jobs:
         working-directory: frontend
 
       - name: Zip deployment package
-        run: cd deploy && zip -r -y ../deploy.zip . --symlinks
+        run: cd deploy && zip -r ../deploy.zip .
         working-directory: frontend
 
       - name: Upload artifact for deployment job
