@@ -2,18 +2,44 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "environment": { "value": "dev" },
-    "appServicePlanName": { "value": "hupiukko-appserviceplan-dev" },
-    "appServiceName": { "value": "hupiukko-frontend-appservice-dev" },
-    "keyVaultName": { "value": "hupiukko-kv-dev" },
-    "keyVaultUri": { "value": "https://hupiukko-kv-dev.vault.azure.net/" },
-    "NEXT_PUBLIC_API_URL": { "value": "https://your-backend-api-url" },
-    "NEXTAUTH_URL": { "value": "https://hupiukko-frontend-appservice-dev.azurewebsites.net/" },
-    "AZURE_AD_CLIENT_ID": { "value": "08716fe7-db8b-45ad-b905-7ce1b2fe0c35" },
-    "AZURE_AD_TENANT_ID": { "value": "287fc32d-9911-40b2-a2c2-a6419fd5e4c9" },
+    "environment": {
+      "value": "dev"
+    },
+    "appServicePlanName": {
+      "value": "hupiukko-appserviceplan-dev"
+    },
+    "frontendAppServiceName": {
+      "value": "hupiukko-frontend-appservice-dev"
+    },
+    "backendAppServiceName": {
+      "value": "hupiukko-backend-appservice-dev"
+    },
+    "keyVaultName": {
+      "value": "hupiukko-kv-dev"
+    },
+    "keyVaultUri": {
+      "value": "https://hupiukko-kv-dev.vault.azure.net/"
+    },
+    "NEXT_PUBLIC_API_URL": {
+      "value": "https://your-backend-api-url"
+    },
+    "NEXTAUTH_URL": {
+      "value": "https://hupiukko-frontend-appservice-dev.azurewebsites.net/"
+    },
+    "AZURE_AD_CLIENT_ID": {
+      "value": "08716fe7-db8b-45ad-b905-7ce1b2fe0c35"
+    },
+    "AZURE_AD_TENANT_ID": {
+      "value": "287fc32d-9911-40b2-a2c2-a6419fd5e4c9"
+    },
     "frontendIdentityResourceIds": {
       "value": [
         "/subscriptions/6d0f08b9-372a-47a8-a09b-59a90271cbe0/resourcegroups/hupiukko-dev-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hupiukko-frontend-identity"
+      ]
+    },
+    "backendIdentityResourceIds": {
+      "value": [
+        "/subscriptions/6d0f08b9-372a-47a8-a09b-59a90271cbe0/resourcegroups/hupiukko-dev-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hupiukko-backend-identity"
       ]
     },
     "managedIdentities": {
@@ -44,6 +70,16 @@
           ]
         }
       ]
+    },
+    "backendAppServiceAzureAd": {
+      "value": {
+        "AzureAd__Instance": "https://login.microsoftonline.com/",
+        "AzureAd__Domain": "jarkkotuorilagmail.onmicrosoft.com",
+        "AzureAd__TenantId": "287fc32d-9911-40b2-a2c2-a6419fd5e4c9",
+        "AzureAd__ClientId": "cbc42c1f-4aa7-4bec-b803-2a9efb0211e0",
+        "AzureAd__Audience": "api://cbc42c1f-4aa7-4bec-b803-2a9efb0211e0",
+        "AzureAd__SwaggerClientId": "08716fe7-db8b-45ad-b905-7ce1b2fe0c35"
+      }
     }
   }
-} 
+}
