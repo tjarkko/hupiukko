@@ -35,6 +35,10 @@ $RECYCLE.BIN/
 # ASP.NET
 appsettings.Production.json
 secrets.json
+*.pfx
+*.p12
+*.key
+*.pem
 
 # DbUp migration logs
 **/DbUp.log

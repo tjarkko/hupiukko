@@ -26,6 +26,7 @@ on:
           - keyvault
           - appservice
           - mi
+          - azuresql
           - none
 
 jobs:
@@ -52,22 +53,32 @@ jobs:
             echo "DEPLOY_KEYVAULT=true" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=true" >> $GITHUB_ENV
             echo "DEPLOY_MI_RBAC=true" >> $GITHUB_ENV
+            echo "DEPLOY_AZURESQL=true" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.services }}" == "keyvault" ]]; then
             echo "DEPLOY_KEYVAULT=true" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
             echo "DEPLOY_MI_RBAC=false" >> $GITHUB_ENV
+            echo "DEPLOY_AZURESQL=false" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.services }}" == "appservice" ]]; then
             echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=true" >> $GITHUB_ENV
             echo "DEPLOY_MI_RBAC=false" >> $GITHUB_ENV
+            echo "DEPLOY_AZURESQL=false" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.services }}" == "mi" ]]; then
             echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
             echo "DEPLOY_MI_RBAC=true" >> $GITHUB_ENV
+            echo "DEPLOY_AZURESQL=false" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.services }}" == "azuresql" ]]; then
+            echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
+            echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
+            echo "DEPLOY_MI_RBAC=false" >> $GITHUB_ENV
+            echo "DEPLOY_AZURESQL=true" >> $GITHUB_ENV
           else
             echo "DEPLOY_KEYVAULT=false" >> $GITHUB_ENV
             echo "DEPLOY_APPSERVICE=false" >> $GITHUB_ENV
             echo "DEPLOY_MI_RBAC=false" >> $GITHUB_ENV
+            echo "DEPLOY_AZURESQL=false" >> $GITHUB_ENV
           fi
 
       - name: Print deployment parameters
@@ -82,7 +93,8 @@ jobs:
             --parameters @infra/parameters/${{ github.event.inputs.environment }}.parameters.json \
             deployKeyVault=${{ env.DEPLOY_KEYVAULT }} \
             deployAppService=${{ env.DEPLOY_APPSERVICE }} \
-            deployManagedIdentitiesAndRbac=${{ env.DEPLOY_MI_RBAC }}
+            deployManagedIdentitiesAndRbac=${{ env.DEPLOY_MI_RBAC }} \
+            deployAzureSql=${{ env.DEPLOY_AZURESQL }}
 
       - name: Deploy Bicep file
         if: ${{ github.event.inputs.preview != 'true' }}
@@ -96,4 +108,5 @@ jobs:
             deployKeyVault=${{ env.DEPLOY_KEYVAULT }}
             deployAppService=${{ env.DEPLOY_APPSERVICE }}
             deployManagedIdentitiesAndRbac=${{ env.DEPLOY_MI_RBAC }}
+            deployAzureSql=${{ env.DEPLOY_AZURESQL }}
           failOnStdErr: false

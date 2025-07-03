@@ -68,6 +68,16 @@
               "description": "Backend can manage SQL server"
             }
           ]
+        },
+        {
+          "name": "hupiukko-sql-identity",
+          "rbacAssignments": [
+            {
+              "roleDefinitionIdOrName": "b86a8fe4-44ce-4948-aee5-eccb2c155cd7",
+              "roleName": "Key Vault Secrets Officer",
+              "description": "SQL identity can write secrets to Key Vault"
+            }
+          ]
         }
       ]
     },
@@ -80,6 +90,18 @@
         "AzureAd__Audience": "api://cbc42c1f-4aa7-4bec-b803-2a9efb0211e0",
         "AzureAd__SwaggerClientId": "08716fe7-db8b-45ad-b905-7ce1b2fe0c35"
       }
+    },
+    "keyVaultResourceId": {
+      "value": "/subscriptions/6d0f08b9-372a-47a8-a09b-59a90271cbe0/resourceGroups/hupiukko-dev-rg/providers/Microsoft.KeyVault/vaults/hupiukko-kv-dev"
+    },
+    "sqlIdentityResourceId": {
+      "value": "/subscriptions/6d0f08b9-372a-47a8-a09b-59a90271cbe0/resourceGroups/hupiukko-dev-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hupiukko-sql-identity"
+    },
+    "sqlServerName": {
+      "value": "hupiukko-sql-dev"
+    },
+    "sqlDbName": {
+      "value": "hupiukko-db-dev"
     }
   }
 }

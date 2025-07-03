@@ -12,6 +12,8 @@ param appServicePlanName string
 param frontendIdentityResourceIds array = []
 @description('Array of user-assigned managed identity resource IDs for the backend app. Leave empty for none.')
 param backendIdentityResourceIds array = []
+@description('Azure AD configuration for the backend app service')
+param backendAppServiceAzureAd object
 
 @description('Startup command for the App Service (e.g., node server.js for Next.js standalone output)')
 param startupCommand string = 'node server.js'
@@ -88,17 +90,13 @@ module hupiukkoBackendAppService 'br/public:avm/res/web/site:0.16.0' = {
     configs: [
       {
         name: 'appsettings'
-        properties: {
-          ENVIRONMENT: environment
-          AzureAd__Instance: 'https://login.microsoftonline.com/'
-          AzureAd__Domain: 'jarkkotuorilagmail.onmicrosoft.com'
-          AzureAd__TenantId: '287fc32d-9911-40b2-a2c2-a6419fd5e4c9'
-          AzureAd__ClientId: 'cbc42c1f-4aa7-4bec-b803-2a9efb0211e0'
-          AzureAd__Audience: 'api://cbc42c1f-4aa7-4bec-b803-2a9efb0211e0'
-          // swagger not used in azure for now at least
-          // AzureAd__SwaggerClientId: '08716fe7-db8b-45ad-b905-7ce1b2fe0c35'
-          // ConnectionStrings__DefaultConnection should be set as a secret or parameter in production
-        }
+        properties: union(
+          {
+            ENVIRONMENT: environment
+            ConnectionStrings__DefaultConnection: '@Microsoft.KeyVault(SecretUri=${keyVaultUri}secrets/sql-connection-string/)'
+          },
+          backendAppServiceAzureAd
+        )
       }
     ]
     // Do not set container image here; deployment pipeline will handle it
