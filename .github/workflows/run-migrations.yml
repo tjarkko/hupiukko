@@ -1,0 +1,59 @@
+name: Run Database Migrations
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run migrations for'
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+      connection_string_secret_name:
+        description: 'Key Vault secret name for connection string'
+        required: true
+        default: 'sql-connection-string'
+        type: string
+
+jobs:
+  run-migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Export environment variables
+        run: |
+          yq ".${{ github.event.inputs.environment }} | to_entries[] | \"\(.key)=\(.value)\"" environments.yml >> $GITHUB_ENV
+        env:
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
+
+      - name: Build migration tool
+        run: |
+          cd backend/Hupiukko.DbMigrations
+          dotnet build -c Release
+
+      - name: Run migrations
+        run: |
+          cd backend/Hupiukko.DbMigrations
+          dotnet run -c Release
+        env:
+          ASPNETCORE_ENVIRONMENT: ${{ github.event.inputs.environment }}
+          KEY_VAULT_NAME: ${{ env.key_vault_name }}
+          SQL_CONNECTION_STRING_SECRET_NAME: ${{ github.event.inputs.connection_string_secret_name }}
+
+      - name: Verify migrations
+        run: |
+          echo "✅ Database migrations completed successfully for ${{ github.event.inputs.environment }}"

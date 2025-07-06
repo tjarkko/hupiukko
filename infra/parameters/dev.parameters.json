@@ -61,11 +61,6 @@
               "roleDefinitionIdOrName": "4633458b-17de-408a-b874-0445c86b69e6",
               "roleName": "Key Vault Secrets User",
               "description": "Backend can read secrets"
-            },
-            {
-              "roleDefinitionIdOrName": "9b7fa17d-e63e-47b0-bb0a-15c516ac86ec",
-              "roleName": "SQL DB Contributor",
-              "description": "Backend can manage SQL server"
             }
           ]
         },

@@ -25,7 +25,7 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
         }
         autoPauseDelay: 60
         minCapacity: '0.5'
-
+        collation: 'Finnish_Swedish_CI_AS'
         availabilityZone: -1
         freeLimitExhaustionBehavior: 'AutoPause'
         useFreeLimit: true

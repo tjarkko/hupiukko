@@ -1,0 +1,110 @@
+name: Bootstrap SQL Users
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to bootstrap'
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+
+jobs:
+  bootstrap-sql-users:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Export environment variables
+        run: |
+          yq ".${{ github.event.inputs.environment }} | to_entries[] | \"\(.key)=\(.value)\"" environments.yml >> $GITHUB_ENV
+        env:
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
+
+      - name: Get connection string from Key Vault
+        id: get-connection-string
+        run: |
+          CONNECTION_STRING=$(az keyvault secret show \
+            --vault-name ${{ env.key_vault_name }} \
+            --name "sql-connection-string" \
+            --query value -o tsv)
+          echo "connection_string=$CONNECTION_STRING" >> $GITHUB_OUTPUT
+
+      - name: Create bootstrap SQL script
+        run: |
+          cat > bootstrap-sql-users.sql << 'EOF'
+          -- Bootstrap SQL Users for Hupiukko
+          -- Created by GitHub Actions pipeline
+
+          -- For migration service principal (GitHub Actions)
+          IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = '${{ env.migration_sp_name }}')
+          BEGIN
+              CREATE USER [${{ env.migration_sp_name }}] FROM EXTERNAL PROVIDER;
+              PRINT 'Created user for migration service principal: ${{ env.migration_sp_name }}';
+          END
+          ELSE
+          BEGIN
+              PRINT 'User already exists for migration service principal: ${{ env.migration_sp_name }}';
+          END
+
+          -- Grant permissions to migration service principal
+          ALTER ROLE db_ddladmin ADD MEMBER [${{ env.migration_sp_name }}];
+          ALTER ROLE db_datareader ADD MEMBER [${{ env.migration_sp_name }}];
+          ALTER ROLE db_datawriter ADD MEMBER [${{ env.migration_sp_name }}];
+          PRINT 'Granted permissions to migration service principal';
+
+          -- For backend managed identity
+          IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = '${{ env.backend_mi_name }}')
+          BEGIN
+              CREATE USER [${{ env.backend_mi_name }}] FROM EXTERNAL PROVIDER;
+              PRINT 'Created user for backend managed identity: ${{ env.backend_mi_name }}';
+          END
+          ELSE
+          BEGIN
+              PRINT 'User already exists for backend managed identity: ${{ env.backend_mi_name }}';
+          END
+
+          -- Grant permissions to backend managed identity
+          ALTER ROLE db_datareader ADD MEMBER [${{ env.backend_mi_name }}];
+          ALTER ROLE db_datawriter ADD MEMBER [${{ env.backend_mi_name }}];
+          PRINT 'Granted permissions to backend managed identity';
+
+          -- Verify users were created
+          SELECT 
+              name,
+              type_desc,
+              authentication_type_desc
+          FROM sys.database_principals 
+          WHERE name IN ('${{ env.migration_sp_name }}', '${{ env.backend_mi_name }}')
+          ORDER BY name;
+          EOF
+
+      - name: Run bootstrap SQL script
+        run: |
+          echo "Running bootstrap SQL script..."
+          echo "Note: Azure AD admin must be set manually before running this pipeline"
+          echo "Run: az sql server ad-admin create --resource-group ${{ env.resource_group }} --server-name ${{ env.sql_server_name }} --display-name \"${{ env.migration_sp_name }}\" --object-id \"$(az ad sp list --display-name \"${{ env.migration_sp_name }}\" --query \"[0].id\" -o tsv)\""
+          echo ""
+          sqlcmd \
+            -S "${{ env.sql_server_name }}.database.windows.net" \
+            -d "${{ env.sql_db_name }}" \
+            -U "${{ env.migration_sp_name }}" \
+            -G \
+            -i bootstrap-sql-users.sql \
+            -v Environment="${{ github.event.inputs.environment }}"
+
+      - name: Verify bootstrap
+        run: |
+          echo "✅ SQL users bootstrap completed successfully!"
+          echo "Migration service principal: ${{ env.migration_sp_name }}"
+          echo "Backend managed identity: ${{ env.backend_mi_name }}"
+          echo "Environment: ${{ github.event.inputs.environment }}"
