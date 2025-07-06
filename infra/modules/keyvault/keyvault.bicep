@@ -16,8 +16,9 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.13.0' = {
     location: location
     sku: 'standard'
     enablePurgeProtection: enablePurgeProtection
-    keys: map(secretNames, secretName => {
+    secrets: map(secretNames, secretName => {
       name: secretName
+      value: ''
     })
   }
 }
