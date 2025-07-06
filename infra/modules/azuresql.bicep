@@ -3,6 +3,7 @@ param sqlServerName string
 param sqlDbName string
 param keyVaultResourceId string
 param sqlIdentityResourceId string
+@secure()
 param sqlConnectionStringSecret string
 
 // SQL identity with Key Vault Secrets Officer role can write the connection string secret

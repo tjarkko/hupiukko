@@ -109,4 +109,4 @@ jobs:
             deployAppService=${{ env.DEPLOY_APPSERVICE }}
             deployManagedIdentitiesAndRbac=${{ env.DEPLOY_MI_RBAC }}
             deployAzureSql=${{ env.DEPLOY_AZURESQL }}
-          failOnStdErr: false
+          #failOnStdErr: false
