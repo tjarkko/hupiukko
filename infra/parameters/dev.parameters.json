@@ -97,6 +97,14 @@
     },
     "sqlDbName": {
       "value": "hupiukko-db-dev"
+    },
+    "sqlConnectionStringSecret": {
+      "value": "hupiukko-sql-connection-string-secret-dev"
+    },
+    "keyVaultSecretNames": {
+      "value": [
+        "hupiukko-sql-connection-string-secret-dev"
+      ]
     }
   }
 }

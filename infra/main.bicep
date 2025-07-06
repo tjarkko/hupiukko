@@ -26,6 +26,10 @@ param sqlIdentityResourceId string
 param sqlServerName string
 @description('Name of the SQL Database')
 param sqlDbName string
+@description('Name of the SQL connection string secret in Key Vault')
+param sqlConnectionStringSecret string
+@description('Array of secret names to create in Key Vault')
+param keyVaultSecretNames array = []
 
 @description('Set to true to deploy the Key Vault module')
 param deployKeyVault bool = true
@@ -51,6 +55,7 @@ module keyVault 'modules/keyvault/keyvault.bicep' = if (deployKeyVault) {
     location: resourceGroup().location
     keyVaultName: keyVaultName
     enablePurgeProtection: false
+    secretNames: keyVaultSecretNames
   }
 }
 
@@ -98,5 +103,6 @@ module azuresql 'modules/azuresql.bicep' = if (deployAzureSql) {
     sqlDbName: sqlDbName
     keyVaultResourceId: keyVaultResourceId
     sqlIdentityResourceId: sqlIdentityResourceId
+    sqlConnectionStringSecret: sqlConnectionStringSecret
   }
 }

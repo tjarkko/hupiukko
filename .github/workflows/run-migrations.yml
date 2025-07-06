@@ -11,11 +11,6 @@ on:
         options:
           - dev
           - prod
-      connection_string_secret_name:
-        description: 'Key Vault secret name for connection string'
-        required: true
-        default: 'sql-connection-string'
-        type: string
 
 jobs:
   run-migrations:
@@ -52,7 +47,7 @@ jobs:
         env:
           ASPNETCORE_ENVIRONMENT: ${{ github.event.inputs.environment }}
           KEY_VAULT_NAME: ${{ env.key_vault_name }}
-          SQL_CONNECTION_STRING_SECRET_NAME: ${{ github.event.inputs.connection_string_secret_name }}
+          SQL_CONNECTION_STRING_SECRET_NAME: ${{ env.sql_connection_string_secret }}
 
       - name: Verify migrations
         run: |

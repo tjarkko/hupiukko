@@ -5,6 +5,8 @@ param location string
 param keyVaultName string
 @description('Disable for development deployments.')
 param enablePurgeProtection bool = true
+@description('Array of secret names to create in Key Vault')
+param secretNames array = []
 
 // Use AVM Key Vault module
 module keyVault 'br/public:avm/res/key-vault/vault:0.13.0' = {
@@ -14,7 +16,9 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.13.0' = {
     location: location
     sku: 'standard'
     enablePurgeProtection: enablePurgeProtection
-    // Add more AVM params as needed
+    keys: map(secretNames, secretName => {
+      name: secretName
+    })
   }
 }
 

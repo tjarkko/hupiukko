@@ -3,6 +3,7 @@ param sqlServerName string
 param sqlDbName string
 param keyVaultResourceId string
 param sqlIdentityResourceId string
+param sqlConnectionStringSecret string
 
 // SQL identity with Key Vault Secrets Officer role can write the connection string secret
 // The AVM SQL Server module will automatically export the connection string to Key Vault
@@ -33,7 +34,7 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
     ]
     secretsExportConfiguration: {
       keyVaultResourceId: keyVaultResourceId
-      sqlAzureConnectionStringSecretName: 'sql-connection-string'
+      sqlAzureConnectionStringSecretName: sqlConnectionStringSecret
     }
     firewallRules: [
       {
@@ -45,4 +46,4 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
   }
 }
 
-output sqlConnectionStringSecretName string = 'sql-connection-string'
+output sqlConnectionStringSecretName string = sqlConnectionStringSecret
