@@ -3,7 +3,7 @@ dev:
   location: swedencentral
   app_service_name: hupiukko-frontend-appservice-dev
   app_service_plan: hupiukko-appserviceplan-dev
-  key_vault: hupiukko-keyvault-dev
+  key_vault: hupiukko-kv-dev
   param_file: infra/parameters/dev.bicepparam
   sql_server_name: hupiukko-sql-dev
   sql_db_name: hupiukko-db-dev
@@ -15,7 +15,7 @@ prod:
   location: swedencentral
   app_service_name: hupiukko-frontend-appservice-prod
   app_service_plan: hupiukko-appserviceplan-prod
-  key_vault: hupiukko-keyvault-prod
+  key_vault: hupiukko-kv-prod
   param_file: infra/parameters/prod.bicepparam
   sql_server_name: hupiukko-sql-prod
   sql_db_name: hupiukko-db-prod
