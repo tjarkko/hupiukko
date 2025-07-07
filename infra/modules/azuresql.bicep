@@ -46,5 +46,3 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
     ]
   }
 }
-
-output sqlConnectionStringSecretName string = sqlConnectionStringSecret
