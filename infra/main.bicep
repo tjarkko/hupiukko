@@ -26,6 +26,7 @@ param sqlIdentityResourceId string
 param sqlServerName string
 @description('Name of the SQL Database')
 param sqlDbName string
+@secure()
 @description('Name of the SQL connection string secret in Key Vault')
 param sqlConnectionStringSecret string
 @description('Array of secret names to create in Key Vault')
@@ -75,6 +76,7 @@ module appService 'modules/appservice/appservice.bicep' = if (deployAppService) 
     frontendIdentityResourceIds: frontendIdentityResourceIds
     backendIdentityResourceIds: backendIdentityResourceIds
     backendAppServiceAzureAd: backendAppServiceAzureAd
+    sqlConnectionStringSecret: sqlConnectionStringSecret
     startupCommand: startupCommand
   }
 }
