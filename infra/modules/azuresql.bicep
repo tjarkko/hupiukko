@@ -16,6 +16,13 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
     name: sqlServerName
     location: location
     primaryUserAssignedIdentityResourceId: sqlIdentityResourceId
+    // set github action as admin initially to be able to do db bootstrap
+    administrators: {
+      azureADOnlyAuthentication: true
+      login: 'github-actions-hupiukko'
+      principalType: 'Application'
+      sid: '731d4474-7109-42f9-a7d4-66f22ec215c5'
+    }
     databases: [
       {
         name: sqlDbName
