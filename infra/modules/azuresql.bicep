@@ -37,6 +37,10 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
       keyVaultResourceId: keyVaultResourceId
       sqlAzureConnectionStringSecretName: sqlConnectionStringSecret
     }
+    // For a production environment, we should use private endpoint and private DNS zone
+    // Since these cost money, we'll just allow traffic from all Azure IPs to be able to
+    // run migrations and access db from backend. The access is secured by using
+    // managed-identity and Azure AD Authentication to Azure SQL.
     firewallRules: [
       {
         name: 'AllowAllAzureIPs'
