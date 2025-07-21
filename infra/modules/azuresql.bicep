@@ -23,6 +23,12 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
       principalType: 'Application'
       sid: '731d4474-7109-42f9-a7d4-66f22ec215c5'
     }
+    managedIdentities: {
+      systemAssigned: false
+      userAssignedResourceIds: [
+        sqlIdentityResourceId
+      ]
+    }
     databases: [
       {
         name: sqlDbName
@@ -39,6 +45,11 @@ module sqlServer 'br/public:avm/res/sql/server:0.19.1' = {
         availabilityZone: -1
         freeLimitExhaustionBehavior: 'AutoPause'
         useFreeLimit: true
+        managedIdentities: {
+          userAssignedResourceIds: [
+            sqlIdentityResourceId
+          ]
+        }
       }
     ]
     secretsExportConfiguration: {
