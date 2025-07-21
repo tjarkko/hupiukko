@@ -101,7 +101,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          scope: resourceGroup
+          scope: resourcegroup
           resourceGroupName: ${{ env.resource_group }}
           template: infra/main.bicep
           parameters: >
