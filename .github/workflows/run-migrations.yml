@@ -46,7 +46,7 @@ jobs:
           dotnet run -c Release
         env:
           ASPNETCORE_ENVIRONMENT: ${{ github.event.inputs.environment }}
-          KEY_VAULT_NAME: ${{ env.key_vault_name }}
+          KEY_VAULT_NAME: ${{ env.key_vault }}
           SQL_CONNECTION_STRING_SECRET_NAME: ${{ env.sql_connection_string_secret }}
 
       - name: Verify migrations
