@@ -96,19 +96,12 @@ jobs:
           ORDER BY name;
           EOF
 
-      - name: Run bootstrap SQL script
-        run: |
-          echo "Running bootstrap SQL script..."
-          echo "Note: Azure AD admin must be set manually before running this pipeline"
-          echo "Run: az sql server ad-admin create --resource-group ${{ env.resource_group }} --server-name ${{ env.sql_server_name }} --display-name \"${{ env.migration_sp_name }}\" --object-id \"$(az ad sp list --display-name \"${{ env.migration_sp_name }}\" --query \"[0].id\" -o tsv)\""
-          echo ""
-          sqlcmd \
-            -S "${{ env.sql_server_name }}.database.windows.net" \
-            -d "${{ env.sql_db_name }}" \
-            -U "${{ env.migration_sp_name }}" \
-            -G \
-            -i bootstrap-sql-users.sql \
-            -v Environment="${{ github.event.inputs.environment }}"
+      - name: Run bootstrap SQL script with Azure/sql-action
+        uses: Azure/sql-action@v2.3
+        with:
+          connection-string: ${{ steps.get-connection-string.outputs.connection_string }}
+          path: './bootstrap-sql-users.sql'
+          action: 'run'
 
       - name: Verify bootstrap
         run: |
