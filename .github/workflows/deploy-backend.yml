@@ -44,8 +44,8 @@ jobs:
           context: ./backend/Hupiukko.Api
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/${{ env.container_image_name }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}/${{ env.container_image_name }}:latest
+            ghcr.io/${{ github.repository_owner }}/${{ env.container_image_name }}:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ env.container_image_name }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -60,10 +60,10 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.backend_app_service_name }}
-          images: ghcr.io/${{ github.repository }}/${{ env.container_image_name }}:${{ github.sha }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ env.container_image_name }}:${{ github.sha }}
 
       - name: Verify deployment
         run: |
           echo "✅ Backend deployed successfully to ${{ env.backend_app_service_name }}"
-          echo "Image: ghcr.io/${{ github.repository }}/${{ env.container_image_name }}:${{ github.sha }}"
+          echo "Image: ghcr.io/${{ github.repository_owner }}/${{ env.container_image_name }}:${{ github.sha }}"
           echo "Environment: ${{ github.event.inputs.environment || 'dev' }}"
