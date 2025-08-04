@@ -17,6 +17,9 @@ param backendAppServiceAzureAd object
 @description('Name of the SQL connection string secret in Key Vault')
 @secure()
 param sqlConnectionStringSecret string
+@description('Name of the SQL connection string secret for backend app in Key Vault')
+@secure()
+param sqlConnectionStringBackendSecret string
 
 @description('Startup command for the App Service (e.g., node server.js for Next.js standalone output)')
 param startupCommand string = 'node server.js'
@@ -98,7 +101,7 @@ module hupiukkoBackendAppService 'br/public:avm/res/web/site:0.16.0' = {
         properties: union(
           {
             ENVIRONMENT: environment
-            ConnectionStrings__DefaultConnection: '@Microsoft.KeyVault(SecretUri=${keyVaultUri}secrets/${sqlConnectionStringSecret}/)'
+            ConnectionStrings__DefaultConnection: '@Microsoft.KeyVault(SecretUri=${keyVaultUri}secrets/${sqlConnectionStringBackendSecret})'
           },
           backendAppServiceAzureAd
         )

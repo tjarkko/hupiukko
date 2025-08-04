@@ -10,6 +10,7 @@ dev:
   migration_sp_name: github-actions-hupiukko
   backend_mi_name: hupiukko-backend-identity
   sql_connection_string_secret: hupiukko-sql-connection-string-secret-dev
+  sql_connection_string_backend_secret: hupiukko-sql-connection-string-backend-secret-dev
   sql_admin_group_name: sql-admins-dev
   backend_app_service_name: hupiukko-backend-appservice-dev
   container_image_name: hupiukko-api-dev
@@ -25,6 +26,7 @@ prod:
   migration_sp_name: github-actions-hupiukko
   backend_mi_name: hupiukko-backend-identity
   sql_connection_string_secret: hupiukko-sql-connection-string-secret-prod
+  sql_connection_string_backend_secret: hupiukko-sql-connection-string-backend-secret-prod
   sql_admin_group_name: sql-admins-prod
   backend_app_service_name: hupiukko-backend-appservice-prod
   container_image_name: hupiukko-api-prod

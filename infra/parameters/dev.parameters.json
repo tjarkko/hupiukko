@@ -101,6 +101,9 @@
     "sqlConnectionStringSecret": {
       "value": "hupiukko-sql-connection-string-secret-dev"
     },
+    "sqlConnectionStringBackendSecret": {
+      "value": "hupiukko-sql-connection-string-backend-secret-dev"
+    },
     "keyVaultSecretNames": {
       "value": [
         "hupiukko-sql-connection-string-secret-dev"
