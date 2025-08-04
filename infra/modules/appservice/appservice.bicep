@@ -60,6 +60,7 @@ module hupiukkoFrontendAppService 'br/public:avm/res/web/site:0.16.0' = {
         name: 'appsettings'
         properties: {
           NEXT_PUBLIC_API_URL: NEXT_PUBLIC_API_URL
+          BACKEND_API_URL: NEXT_PUBLIC_API_URL
           NEXTAUTH_URL: NEXTAUTH_URL
           AZURE_AD_CLIENT_ID: AZURE_AD_CLIENT_ID
           AZURE_AD_TENANT_ID: AZURE_AD_TENANT_ID
@@ -89,6 +90,7 @@ module hupiukkoBackendAppService 'br/public:avm/res/web/site:0.16.0' = {
     managedIdentities: {
       userAssignedResourceIds: backendIdentityResourceIds
     }
+    keyVaultAccessIdentityResourceId: backendIdentityResourceIds[0]
     // Add backend-specific app settings here if needed
     configs: [
       {
