@@ -1,12 +1,13 @@
 # Full-Stack Web Application
 
-A modern full-stack web application built with Next.js, .NET 8, and Azure services.
+A modern full-stack web application built with Next.js, .NET 9, and Azure services.
 
 ## 🏗️ Architecture
 
 ### Frontend (Next.js)
+
 - **Framework**: Next.js with App Router
-- **Authentication**: 
+- **Authentication**:
   - next-auth with Azure AD provider
   - Server-side token management
   - Secure HTTP-only session cookies
@@ -18,9 +19,9 @@ A modern full-stack web application built with Next.js, .NET 8, and Azure servic
   - Generated from OpenAPI spec
   - Uses orval (React Query integration)
   - Type-safe API calls
-  - Automated generation via GitHub Actions
 
 ### Backend (.NET)
+
 - **Framework**: ASP.NET Core Web API
 - **Authentication**:
   - Azure AD integration
@@ -33,6 +34,7 @@ A modern full-stack web application built with Next.js, .NET 8, and Azure servic
 - **Deployment**: Azure Container Apps
 
 ### Frontend-Backend Communication
+
 - **API Proxy Pattern**:
   - Client components use generated API hooks
   - All requests go through Next.js API routes (`/api/proxy/*`)
@@ -45,22 +47,26 @@ A modern full-stack web application built with Next.js, .NET 8, and Azure servic
   4. Token automatically attached to backend requests
 
 ### Database
+
 - Azure SQL Database (Serverless)
 - Managed through DbUp migrations
 - Raw SQL scripts for version control
 
 #### Migration Naming Convention
+
 Database migration scripts follow a strict timestamp-based naming convention:
 
 **Format**: `YYYY_MM_DD_HHMM_DescriptiveAction.sql`
 
 **Examples**:
+
 - `2025_06_17_1117_InitialSchema.sql` - Initial database schema creation
 - `2025_06_18_0930_INSERT_INTO_ExerciseCategories_TestData.sql` - Seed data insertion
 - `2025_06_20_1445_ALTER_TABLE_Users_ADD_ProfileImage.sql` - Schema changes
 - `2025_06_22_1630_CREATE_INDEX_WorkoutSessions_Performance.sql` - Performance improvements
 
 **Guidelines**:
+
 - Use 24-hour format for time (HHMM)
 - Use descriptive action names (CREATE, ALTER, INSERT, DROP, etc.)
 - Include table names when relevant
@@ -68,6 +74,7 @@ Database migration scripts follow a strict timestamp-based naming convention:
 - Scripts run in chronological order automatically
 
 ### Infrastructure
+
 - Azure services for all components
 - Infrastructure as Code with Bicep
 - Automated deployments via GitHub Actions
@@ -75,6 +82,7 @@ Database migration scripts follow a strict timestamp-based naming convention:
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - .NET 9 SDK
 - Node.js 18+ and npm
 - Azure CLI
@@ -84,12 +92,14 @@ Database migration scripts follow a strict timestamp-based naming convention:
 ### Development Setup
 
 1. Clone the repository:
+
    ```bash
    git clone [repository-url]
    cd [project-name]
    ```
 
 2. Frontend Setup:
+
    ```bash
    cd frontend
    npm install
@@ -97,6 +107,7 @@ Database migration scripts follow a strict timestamp-based naming convention:
    ```
 
 3. Backend Setup:
+
    ```bash
    cd backend
    dotnet restore
@@ -112,6 +123,7 @@ Database migration scripts follow a strict timestamp-based naming convention:
 ### Environment Variables
 
 #### Frontend (.env.local):
+
 ```
 NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXTAUTH_URL=http://localhost:3000
@@ -122,6 +134,7 @@ AZURE_AD_TENANT_ID=your-tenant-id
 ```
 
 #### Backend (appsettings.Development.json):
+
 ```json
 {
   "ConnectionStrings": {
@@ -168,16 +181,19 @@ AZURE_AD_TENANT_ID=your-tenant-id
 The project uses GitHub Actions for continuous integration and deployment:
 
 - **Frontend**:
+
   - Build and deploy to Azure App Service
   - Generate API client from OpenAPI spec
   - Run type checks and tests
 
 - **Backend**:
+
   - Build and deploy to Azure Container Apps
   - Generate OpenAPI specification
   - Run unit tests
 
 - **Database**:
+
   - Run migrations using DbUp
   - Version control for schema changes
 
@@ -188,12 +204,14 @@ The project uses GitHub Actions for continuous integration and deployment:
 ## 🔒 Security
 
 - **Authentication**:
+
   - Azure AD / Entra ID integration
   - Secure token handling
   - HTTP-only cookies
   - CSRF protection
 
 - **API Security**:
+
   - Token validation
   - Rate limiting
   - CORS configuration
@@ -234,17 +252,20 @@ You can use the provided scripts to manage the SQL Server container:
 The scripts will build the image if needed, start the container if not running, and clean up as appropriate.
 
 ### Collation Note
+
 - The SQL Server container is started with `Finnish_Swedish_CI_AS` collation by default. This ensures correct alphabetical order for Å, Ä, Ö and is recommended for Finnish/Swedish users.
 - If you need a different collation, edit the `MSSQL_COLLATION` environment variable in `start-db.sh`.
 
 ### Manual Commands (if you prefer)
 
 #### Build the SQL Server Docker image
+
 ```sh
 docker build -f Dockerfile.sqlserver -t hupiukko-sqlserver .
 ```
 
 #### Run the SQL Server container (with Finnish/Swedish collation)
+
 ```sh
 docker run -d \
   --name hupiukko-sqlserver \
@@ -258,16 +279,19 @@ docker run -d \
 ```
 
 #### Stop and remove the SQL Server container
+
 ```sh
 docker stop hupiukko-sqlserver && docker rm hupiukko-sqlserver
 ```
 
 #### View SQL Server logs
+
 ```sh
 docker logs -f hupiukko-sqlserver
 ```
 
 #### Check SQL Server container status
+
 ```sh
 docker ps -a | grep hupiukko-sqlserver
 ```
@@ -282,10 +306,12 @@ docker ps -a | grep hupiukko-sqlserver
 The frontend uses [Orval](https://orval.dev/) to generate a type-safe React Query API client from the backend's OpenAPI (Swagger) spec.
 
 ### Prerequisites
+
 - The backend must be running and serving the OpenAPI spec at `http://localhost:5109/swagger/v1/swagger.json` (or your configured port).
 - You must have installed dependencies in `frontend/` (run `pnpm install` or `npm install`).
 
 ### How to Generate
+
 From the `frontend/` directory, run:
 
 ```bash
@@ -293,14 +319,17 @@ pnpm orval --config orval.config.js
 ```
 
 This will:
+
 - Fetch the latest OpenAPI spec from the running backend
 - Generate React Query hooks and TypeScript types in `frontend/api/generated/`
 
 ### When to Regenerate
+
 - After making changes to backend endpoints, DTOs, or OpenAPI annotations
 - After changing the backend route structure (e.g., removing the `/api/` prefix)
 
 ### Troubleshooting
+
 - If you see errors about missing endpoints or types, ensure the backend is running and the OpenAPI spec is accessible.
 - If the generated hooks use the wrong base URL, check `orval.config.js` for the correct `baseUrl` or `axios.baseURL` override.
-- If you change the backend route prefix (e.g., remove `/api/`), update the OpenAPI spec and regenerate the client. 
+- If you change the backend route prefix (e.g., remove `/api/`), update the OpenAPI spec and regenerate the client.
